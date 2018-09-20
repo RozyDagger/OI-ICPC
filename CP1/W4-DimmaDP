@@ -1,0 +1,78 @@
+/********************************************
+Doug Dimmadome, Owner of the Dimmsdale Dimmadome, is trying to return to Dimmsdale Dimmadome for the premier of Crash Nebula on Ice. On his way home, he realizes the only nearby gas stations are in towns that don't like his Dimma-Development plans!
+
+To avoid as many angry people as possible, Doug Dimmadome decided that his chauffeur should drive through as few towns as possible. It's up to you, his personal software engineer, to make a path for his driver to get back to Dimmsdale.
+
+Input Format
+
+You will be given a line containing a single integer N, which denotes how many towns there are between Doug Dimmadome and Dimmsdale.
+
+The following line will contain N integers, each of which represents a single town on the way to Dimmsdale.
+
+The value I represents how far Doug Dimmadome can travel if he fuels up there. This means that if Doug starts at a town without a gas station (value = 0) he cannot progress. If he starts in a town that has enough gas to move him one town over (value = 1), he can travel one town over. Similarly, if he moves to a town with a value of 9, he can travel up to 9 towns towards Dimmsdale.
+
+Every time Doug Dimmadome visits a town, he empties out his gas tank to cook some delicious Blubber Nuggets. This means that every time he visits a town, he empties out his gas tank.
+
+I indicates how far he can travel from a single gas station in that town.
+
+Constraints
+1<=N<=3000000
+0<=I<=300
+
+Output Format
+
+You must output a single integer indicating the minimal number of towns Doug Dimmadome needs to visit to get back home. If Doug cannot make it home, output -1.
+
+Sample Input 0
+
+5
+1 5 2 3 7 
+Sample Output 0
+
+2
+Explanation 0
+
+Doug travels from the first town, to the second town (5). From there, he can reach the end of the input
+**************************************/
+#include <iostream>
+#define INF 0x3F3F3F3F
+#define LL long long
+#define max(a, b) (a>b?a:b)
+static int x = []() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  return 0;
+}();
+int main() {
+  LL n;
+  std::cin>>n;
+  LL *arr=new LL[n], min;
+  for(LL i=0;i<n;++i) std::cin>>arr[i];
+  if(n<=1){
+    std::cout<<"0";
+    return 0;
+  }
+  if(arr[0]==0){
+    std::cout<<"-1";
+    return 0;
+  }
+  LL dist=arr[0], s = arr[0], dp =1, i=1; 
+  for(i=1;i<n;++i) {
+    if (i == n-1){
+      std::cout<<dp;
+      return 0;
+  }
+  dist=max(dist, i+arr[i]);
+  --s;
+  if (s==0) {
+    ++dp;
+    if(i>=dist){
+        std::cout<<"-1";
+        return 0;
+      }
+      s=dist-i;
+    }
+  }
+  std::cout<<"-1";
+  return 0;
+}
