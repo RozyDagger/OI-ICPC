@@ -1,0 +1,91 @@
+/**********************************
+Balaji and his coworkers like to play Foosball on their lunch break. Foosball is a game typically played by 2 players (individual matchup) or 4 players (team play). However, due to the increasing interest and availability of coworkers, Balaji has created a new variation that supports 5 or more players. Each individual point is played by four players: two on the White team and two on the Black team.
+
+image
+
+The remaining players wait in line for their turn to play. On each point, the players on the scoring team switch positions (e.g., if White scores the point, then the White Offense player becomes the White Defense player, and vice versa). The Offense player of the team that lost the point becomes the Defense player of the same team, while the Defense player of the team that lost the point goes to the back of the line and waits for their next chance to play. The person at the front of the line becomes the new Offense player of the team that lost the point.
+
+Based on these rules, a team that continues scoring consecutive points gets to keep playing together (swapping positions with each other after each point) until the other team breaks the streak. Each such streak of points creates a dynasty for the winning team. Dynasties can be short-lived (a single point) or long-lived, but they are always broken when the opposing team scores a point. The “winners” of this variation of foosball are the players that can create the longest dynasty.
+
+Input Format
+
+Input begins with a line containing an integer n representing the number of players (5≤n≤10). The next line contains the n names of all participating players. The first four are the names of the four players who initially arrive at the table (in that order): the first person to arrive starts at White Offense, the second starts at Black Offense, the third starts at White Defense, and the fourth starts at Black Defense. The remaining players get in line to wait for their turn. The final input line contains a non-empty string indicating which side scored each point, with a White team point represented by ‘W’ and a Black team point represented by ‘B’. The maximum length of this string will be 1000.
+
+Constraints
+
+5 ≤ n ≤ 10
+
+Output Format
+
+Display the team that has achieved the longest dynasty. If more than one team ties for the record, then display each of these teams in chronological order of when the record was set, one team per line. When displaying a team, names should be displayed in the order in which the players arrived at the table for that team. Note that it is possible for the same team to appear more than once in the output, potentially with the player names in a different order.
+
+Sample Input 0
+
+6
+Balaji David Alex Scott Andrew Ravi
+WWBWBBWBW
+Sample Output 0
+
+Balaji Alex
+Andrew David
+Sample Input 1
+
+6
+Amy Jinu Kasey Sarah Sheetal Julia
+BBBBB
+Sample Output 1
+
+Jinu Sarah
+**************************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+int n, len, w, b;
+queue<string> Q;
+string name[11], wb, fw[2], fb[2], str[4];
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    scanf("%d", &n);
+    for(int i=0;i<n;cin>>name[i++]);
+    cin>>wb;
+    len=wb.length();
+    vector<pair<string, string>> rst[len+1];
+    fw[0]=str[0]=name[0];
+    fw[1]=str[1]=name[2];
+    fb[0]=str[2]=name[1];
+    fb[1]=str[3]=name[3];
+    for(int i=4;i<n;Q.push(name[i++]));
+    for(int i=0;i<len;++i){
+        swap(fw[0], fw[1]);
+        swap(fb[0], fb[1]);
+        if(wb[i]=='W'){
+            ++w;
+            b=0;
+            rst[w].push_back(make_pair(str[0], str[1]));
+            Q.push(fb[0]);
+            str[2]=fb[1];
+            str[3]=fb[0]=Q.front();
+            Q.pop();
+        }else{
+            ++b;
+            w=0;
+            rst[b].push_back(make_pair(str[2], str[3]));
+            Q.push(fw[0]);
+            str[0]=fw[1];
+            str[1]=fw[0]=Q.front();
+            Q.pop();
+        }
+    }
+    for(int i=len;i>=0;--i)
+        if(rst[i].size()>0){
+            for(int j=0;j<rst[i].size();cout<<rst[i][j].first<<" "<<rst[i][j++].second<<endl);
+            break;
+        }
+    return 0;
+}
