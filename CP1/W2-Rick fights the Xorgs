@@ -1,0 +1,69 @@
+/**************************************
+Run for your lives, the Xorgs are here!
+
+Luckily Rick is here to defend Earth. This battle does not involve singing, but actually zapping the Xorgs with the special laser Rick created on a dare 10 years ago. Being an old device, a vital part of the machine is broken and Rick needs your help to fix it.
+
+The Xorgs has a very organized army - they come in a single row with varied strength. This laser can kill all consecutive Xorgs in the row whose strength XOR to a specific value. The sensor of the machine is broken and it is unable to select the consecutive Xorgs to pick.
+
+Your task is to count the number of consecutive Xorgs whose strengths XOR to the given value. Time is of the essense here, so you should give this number to Rick within one pass of the file of Xorgs. You should think of building additional structures that could help you in your task.
+
+Input Format
+
+The first line is T, the number of test cases to be checked. Each test case has 2 lines. The first line has 2 numbers N and M, where N is number of Xorgs in a single file and M is the target XOR value. The second line contains N elements, the strength of Xorgs charging in a single file.
+
+Constraints
+
+0 <= T <= 100 1 <= N <= 10^6
+
+Output Format
+
+The number of consecutive Xorgs than can be zapped per test case each on a new line.
+
+Sample Input 0
+
+2
+5 6
+4 2 2 6 4
+5 5
+5 6 7 8 9
+Sample Output 0
+
+4
+2
+Explanation 0
+
+First case: The subarrays having XOR of their elements as 6 are {4, 2}, {4, 2, 2, 6, 4}, {2, 2, 6}, and {6}
+
+Second case: The subarrays having XOR of their elements as 2 are {5} and {5, 6, 7, 8, 9}
+************************************************/
+#include <bits/stdc++.h>
+using namespace std;
+
+long long subarrayXor(int arr[], int n, int m)
+{
+    long long ans = 0;
+    int* xorArr = new int[n];
+    unordered_map<int, int> mp;
+    xorArr[0] = arr[0];
+    for (int i=1;i<n;i++) xorArr[i] = xorArr[i-1] ^ arr[i];
+    for (int i=0; i<n;i++) {
+        int tmp = m^xorArr[i];
+        ans=ans+((long long)mp[tmp]);
+        if (xorArr[i]==m) ans++;
+        mp[xorArr[i]]++;
+    }
+    return ans;
+}
+
+int main()
+{
+    int x;
+    scanf("%d", &x);
+    while(x--){
+        int arr[1000000], n, m;
+        scanf("%d%d", &n, &m);
+        for(int i=0;i<n;++i) cin>>arr[i];
+        cout<< subarrayXor(arr, n, m)<<endl;
+    }
+    return 0;
+}
