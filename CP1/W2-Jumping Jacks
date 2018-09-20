@@ -1,0 +1,115 @@
+/********************************************
+Your friend Jack is playing a game of Jumping Jacks. The goal of the game is to jump from the first stone to the last stone in minimum number of jumps. Jack can either to next stone i -> i+1, or he can jump to the previous stone i -> i-1. Each stone also has a number written on it, and Jack can jump from one stone to the other if they have the same number written on it. Help Jack figure out the minimum number of moves he will have to make to reach the end.
+
+Input Format
+
+The first line of the input will consist of the number of testcases "t". For every testcase, first line will have a number "n", which will tell you the total number of stones. The second line have "n" space separated numbers, and the ith number will be the number written on the ith stone.
+
+Constraints
+
+1 <= t <= 100 1 <= n <= 60
+
+Output Format
+
+For every testcase print out the minimum moves required to go from the 1st stone to the nth stone.
+
+Sample Input 0
+
+2
+5
+1 2 3 4 5
+7
+2 4 3 1 2 3 4
+Sample Output 0
+
+4
+2
+Explanation 0
+
+1) 1->2->3->4->5 - 4 moves 2) 2->4->4 - 3 moves
+********************************************/
+#include <cmath>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <limits.h>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int V[51][51];
+
+int minD(int dist[], int spt[], int len) {
+    int min=INT_MAX, ind;  
+    for(int i=0;i<len;++i) if(!spt[i]&&dist[i]<=min) min=dist[i], ind=i;
+    return ind;
+}
+void dijk(int src, int len) {
+    int *dist=new int[len];
+    int *spt=new int[len];
+    for (int i=0;i<len;++i) dist[i]=INT_MAX, spt[i]=0;
+    dist[src]=0;
+    for(int i=0;i<len-1;++i) {
+        int u=minD(dist, spt, len);
+        spt[u]=1;
+        for(int j=0;j<len;++j)
+            if(!spt[j]&&V[u][j]&&dist[u]!=INT_MAX&&dist[u]+V[u][j]<dist[j]) dist[j]=dist[u]+V[u][j];
+    }
+    printf("%d\n", dist[len-1]);
+}
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    int n, l;
+    scanf("%d", &n);
+    while(n--){
+        scanf("%d", &l);
+        int *val=new int[l];
+        for(int i=0;i<l;++i){
+            int in;
+            scanf("%d", val+i);
+        }
+        if(l==1) {
+            printf("1\n");
+            continue;
+        }
+        V[0][1]=V[1][0]=1;
+        V[l-1][l-2]=V[l-2][l-1]=1;
+        for(int i=1;i<l;++i){
+            if(val[0]==val[i]) V[0][i]=V[i][0]=1;
+        }
+        for(int i=0;i<l-1;++i){
+            if(val[l-1]==val[i]) V[l-1][i]=V[i][l-1]=1;
+        }
+        for(int i=0;i<l;++i){
+            if(i!=0&&i!=l-1) V[i-1][i]=V[i][i+1]=V[i-1][i]=V[i+1][i]=1;
+            for(int j=0;j<l;++j){
+                if(val[i]==val[j]&&i!=j){
+                    V[i][j]=V[j][i]=1;
+                }
+            }
+        }
+        /*
+        printf("  ");
+        for(int i=0;i<l;++i){
+            printf("%d ", i);
+        }
+        printf("\n");
+        for(int i=0; i<l;++i){
+            printf("%d ", i);
+            for(int j=0;j<l;++j){
+                printf("%d ", V[i][j]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+        */
+        dijk(0, l);
+        for(int i=0;i<50;++i){
+            for(int j=0;j<50;++j){
+                V[i][j]=V[j][i]=0;
+            }
+        }
+    }
+    return 0;
+}
