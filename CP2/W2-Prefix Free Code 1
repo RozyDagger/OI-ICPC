@@ -1,0 +1,148 @@
+/**********************************
+Consider n initial strings of lower case letters, where no initial string is a prefix of any other initial string. Now, consider choosing k of the strings (no string more than once), and concatenating them together. You can make this many such composite strings:
+
+n × (n−1) × (n−2) × … × (n−k+1)
+Consider sorting all of the composite strings you can get via this process in alphabetical order. You are given a test composite string, which is guaranteed to belong on this list. Find the position of this test composite string in the alphabetized list of all composite strings, modulo 10^9+7. The first composite string in the list is at position 1.
+
+Input Format
+
+Each input will consist of a single test case. Note that your program may be run multiple times on different inputs. Each test case will begin with a line with two integers, first n and then k (1≤k≤n), where n is the number of initial strings, and k is the number of initial strings you choose to form composite strings. The upper bounds of n and k are limited by the constraints on the strings, in the following paragraphs.
+
+Each of the next n lines will contain a string, which will consist of one or more lower case letters a..z. These are the n initial strings. It is guaranteed that none of the initial strings will be a prefix of any other of the initial strings.
+
+Finally, the last line will contain another string, consisting of only lower case letters a..z. This is the test composite string, the position of which in the sorted list you must find. This test composite string is guaranteed to be a concatenation of k unique initial strings.
+
+Constraints
+
+The sum of the lengths of all input strings, including the test string, will not exceed 10^6 letters.
+
+Output Format
+
+Output a single integer, which is the position in the list of sorted composite strings where the test composite string occurs. Output this number modulo 10^9+7.
+
+Sample Input 0
+
+5 3
+a
+b
+c
+d
+e
+cad
+Sample Output 0
+
+26
+Sample Input 1
+
+8 8
+font
+lewin
+darko
+deon
+vanb
+johnb
+chuckr
+tgr
+deonjohnbdarkotgrvanbchuckrfontlewin
+Sample Output 1
+
+12451
+************************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <bits/stdc++.h>
+#include <map>
+using namespace std;
+
+#define ll long long
+#define low(x) x&(-x)
+
+const int DEG=1e6+10;
+const ll MAXN=1e9+7;
+
+char str[DEG];
+ll a[DEG], c[DEG], rst=1, cnt=1;
+map<ll, ll> MP;
+
+typedef struct Node{
+    ll a;
+    Node *c[26];
+    Node(){
+        a=0;
+        for(int i=0;i<26;c[i++]=NULL);
+    }
+}Node;
+
+void Update(int x, ll y){
+    while(x<DEG){
+        c[x]+=y;
+        x+=low(x);
+    }
+}
+
+ll Query(int x){
+    ll rst=0;
+    while(x>0){
+        rst+=c[x];
+        x-=low(x);
+    }
+    return rst;
+}
+
+void Make(Node *t, char *s, ll n){
+    Node *tmp=t;
+    for(int i=0;s[i];++i){
+        int x=s[i]-'a';
+        if(!tmp->c[x]) tmp->c[x]=new Node;
+        tmp=tmp->c[x];
+    }
+    tmp->a=n;
+}
+
+void DFS(Node *r){
+    Node *tmp=r;
+    for(int i=0;i<26;++i){
+        if(tmp->c[i]) DFS(tmp->c[i]);
+        else if(tmp->a!=0){
+            MP[tmp->a]=cnt++;
+            return;
+        }
+    }
+}
+
+void Find(Node *r, char *s, int n){
+    Node *tmp=r;
+    for(int i=0;s[i];++i){
+        int x=s[i]-'a';
+        tmp=tmp->c[x];
+        if(tmp->a){
+            rst=(a[n--]*(MP[tmp->a]-Query(MP[tmp->a])-1)+rst)%MAXN;
+            Update(MP[tmp->a], 1);
+            tmp=r;
+        }
+    }
+}
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    ll n, k;
+    cin>>n>>k;
+    a[0]=1;
+    a[1]=n-k+1;
+    for(ll i=2;i<=k;++i){
+        a[i]=a[i-1]*(n+i-k)%MAXN;
+    }
+    Node *r=new Node;
+    for(int i=1;i<=n;++i){
+        cin>>str;
+        Make(r, str, i);
+    }
+    DFS(r);
+    cin>>str;
+    Find(r, str, k-1);
+    printf("%lld\n", rst);
+    return 0;
+}
