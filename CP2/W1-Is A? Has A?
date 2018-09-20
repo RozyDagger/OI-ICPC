@@ -1,0 +1,109 @@
+/*******************************
+Two familiar concepts in object oriented programming are the is-a and has-a relationships. Given two classes A and B, we say that A is-a B if A is a subclass of B; we say A has-a B if one of the fields of A is of type B. For example, we could imagine an object-oriented language (call it ICPC++) with code like that below, where the class Day is-a Time, the class Appointment is both a DateBook and a Reminder, and class Appointment has-a Day.
+
+class Day extends Time {
+    ...                       
+}
+
+class Appointment extends Datebook, Reminder {
+    private Day date;
+    ...
+}
+These two relationships are transitive. For example if A is-a B and B is-a C then it follows that A is-a C. This holds as well if we change all the is-a's in the last sentence to has-a's. It also works with combinations of is-a's and has-a's: in the example above, Appointment has-a Time, since it has-a Day and Day is-a Time. Similarly, if class DateBook has-a Year then Appointment has-a Year, since Appointment is-a DateBook.
+
+In this problem you will be given a set of is-a and has-a relationships and a set of queries of the form A is/has-a B. You must determine if each query is true or false.
+
+Input Format
+
+Input starts with two integers  and , (), where  specifies the number of given is-a and has-a relationships and  specifies the number of queries. The next  lines each contain one given relationship in the form    where  and  are single-word class names, and  is either the string is-a or has-a. Following this are queries, one per line, using the same format. All is-a and has-a relationships between the given classes can be deduced from the  given relationships. Is-a relationships can not be circular (apart from the trivial identity  is-a ).
+
+Constraints
+
+There will be at most  distinct class names in the  lines, and all class names in the last  lines will appear at least once in the initial  lines.
+
+Output Format
+
+For each query, display the query number (starting at one) and whether the query is true or false.
+
+Sample Input 0
+
+5 5
+Day is-a Time
+Appointment is-a Datebook
+Appointment is-a Reminder
+Appointment has-a Day
+Datebook has-a Year
+Day is-a Time
+Time is-a Day
+Appointment has-a Time
+Appointment has-a Year
+Day is-a Day
+Sample Output 0
+
+Query 1: true
+Query 2: false
+Query 3: true
+Query 4: true
+Query 5: true
+****************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <map>
+#include <string.h>
+#include <queue>
+#include <string>
+using namespace std;
+
+#define MAXC 501
+int ID[MAXC][MAXC], RE[MAXC][MAXC], FLAG[MAXC][MAXC][2], CNT;
+map <string, int> MP;
+
+int StoI(string str){
+    if(MP.count(str)) return MP[str];
+    MP[str]=CNT++;
+    return MP[str];
+}
+
+void BFS(int n){
+    queue <pair<int, int>> tmpQ;
+    FLAG[n][n][0]=1;
+    tmpQ.push(pair<int, int>(n, 0));
+    while(!tmpQ.empty()){
+        pair<int, int> z=tmpQ.front();
+        tmpQ.pop();
+        for(int i=0;i<CNT;++i){
+            if(!FLAG[n][i][z.second]&&ID[z.first][i]){
+                FLAG[n][i][z.second]=1;
+                tmpQ.push(pair<int, int> (i, z.second));
+            }
+            if(!FLAG[n][i][1]&&RE[z.first][i]){
+                FLAG[n][i][1]=1;
+                tmpQ.push(pair<int, int> (i, 1));
+            }
+        }
+    }
+}
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    int ia, ib;
+    string sa, sb, sc;
+    scanf("%d%d", &ia, &ib);
+    MP.clear();
+    for(int i=0;i<ia;++i){
+        cin>>sa>>sb>>sc;
+        StoI(sa);
+        StoI(sc);
+        if(sb[0]=='i') ID[StoI(sa)][StoI(sc)]=1;
+        else if(sb[0]=='h') RE[StoI(sa)][StoI(sc)]=1;
+    }
+    for(int i=0;i<CNT;BFS(i++));
+    for(int i=1;i<=ib;++i){
+        cin>>sa>>sb>>sc;
+        printf("Query %d: %s\n", i, sb[0]=='i'?(FLAG[StoI(sa)][StoI(sc)][0]?"true":"false"):(FLAG[StoI(sa)][StoI(sc)][1]?"true":"false"));
+    }
+    return 0;
+}
