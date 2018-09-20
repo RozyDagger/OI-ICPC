@@ -1,0 +1,120 @@
+/**************************************
+Your friend Tom is taking Algorithms and Data structures class this semester, and his Professor gave him a homework and one of the questions was to build some complete Binary search trees. But given that Tom had no knowledge of BST's, he completely messed up his trees, and he comes to you for help. Since you take optimization very seriously, you want to figure out the minimum of nodes in the tree which you will need to swap in order to convert the binary tree into a binary search tree.
+
+The tree has N nodes, with values 1, 2, 3,...., N. 1st element is the root node. 2*i and 2*i + 1 elements will be the left and right child of the ith node respectively.
+
+Input Format
+
+The first line will contain a number N, denoting the number of elements in the tree. The second line will contain N numbers denoting all the elements of the tree.
+
+Constraints
+
+N <= 105
+
+Output Format
+
+You should print a number denoting the minimum number of swaps needed.
+
+Sample Input 0
+
+3
+1 2 3
+Sample Output 0
+
+1
+Explanation 0
+
+Initial Tree:
+
+    1
+   / \
+  2   3
+
+After swapping (1, 2)
+
+    2
+   / \
+  1   3
+Number of swaps: 1
+
+Sample Input 1
+
+3
+3 2 1 
+Sample Output 1
+
+2
+Explanation 1
+
+Initial Tree:
+
+    3
+   / \
+  2   1
+
+After swapping (1, 3)
+
+    1
+   / \
+  2   3
+
+After swapping (2, 1)
+
+    2
+   / \
+  1   3
+Number of swaps: 2
+**************************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <queue>
+#include<bits/stdc++.h>
+using namespace std;
+
+#define LEFT(x) (2*x+1)
+#define RIGHT(x) (2*x+2)
+
+int n, RST, *arr;
+vector<int> V;
+
+void InOrder(int i){
+    if(i>=n) return;
+    if(LEFT(i)<n) InOrder(LEFT(i));
+    V.push_back(*(arr+i));
+    if(RIGHT(i)<n) InOrder(RIGHT(i));
+}
+int Swaps(vector<int> arr) {
+    RST=0;
+    pair<int, int> arrPos[n];
+    for(int i=0;i<n;++i) {
+        arrPos[i].first=arr[i];
+        arrPos[i].second=i;
+    }
+    sort(arrPos, arrPos+n);
+    vector<bool> vis(n, false);
+    for(int i=0;i<n;++i) {
+        if(vis[i]||arrPos[i].second==i) continue;
+        int cycle_size=0, j=i;
+        while(!vis[j]) {
+            vis[j]=1;
+            j=arrPos[j].second;
+            cycle_size++;
+        }
+        RST+=(cycle_size-1);
+    }
+    return RST;
+}
+
+int main() {    
+    scanf("%d", &n);
+    arr=new int[n+5];
+    for(int i=0;i<n;++i){
+        scanf("%d", arr+i);
+    }
+    InOrder(0);
+    printf("%d\n", Swaps(V));
+    return 0;
+}
