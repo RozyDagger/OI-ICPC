@@ -1,0 +1,100 @@
+/***********************************
+Purdue Pete is planting a row of trees outside WALC. However, Mr. Nerd comes out from WALC from time to time to remove one of the trees at a time (Don’t ask me why, I’m wondering too :) Think this row of trees as an array. The location of each tree is from 1 to n. Pete plants a tree at one location at each time (If there’s already a tree, Pete does nothing), while Mr. Nerd chooses a location to remove a tree from (If there’s no tree, he just comes back to WALC). President Daniels wants to know the length of the longest consecutive trees throughout this weird war between Pete and Mr. Nerd. Can you help him?
+
+Input Format
+
+The first line contains two integers n, m (1 <= n, m <= 500000). n is the total number of locations to plant trees, m is the total number of times that Pete and Mr. Nerd plants/removes trees.
+
+In the following m lines, each line contains two integers a, b. if a = 1, Pete is going to plant a tree; if a = 2, Mr. Nerd is going to remove a tree. b is the location to plant a tree at/remove a tree from. (1 <= a <= 2, 1 <= b <= n)
+
+Output Format
+
+For each line of these m lines, output the length of the longest consecutive trees for President Daniels.
+
+Sample Input 0
+
+4 5
+1 1
+1 3
+1 4
+2 4
+1 2
+Sample Output 0
+
+1
+1
+2
+1
+3
+*****************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+#define LEFT(x) (2*x+1)
+#define RIGHT(x) (2*x+2)
+#define PARENT(x) ((x-1)/2)
+#define NEW (Node*)malloc(sizeof(Node))
+
+typedef struct Node{
+    int len, llen, rlen, cnt;
+}Node;
+
+int n, m;
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */  
+    scanf("%d%d", &n, &m);
+    n=pow(2, ceil(log2(n)));
+    Node *T=new Node[2*n-1];
+    int HEIGHT=(int) log2(2*n-1);
+    for(int i=0;i<n-1;++i){
+        T[i].len=T[i].rlen=T[i].llen=T[i].cnt=0;
+    }
+    for(int i=0;i<m;++i){
+        int pn, pr;
+        scanf("%d%d", &pn, &pr);
+        int cur=2*n-pr-1;
+        T[cur].len=T[cur].rlen=T[cur].llen=2-pn;
+        //printf("ini: CUR: %d; LEN: %d; LL: %d; RL: %d\n", cur, T[cur].len, T[cur].llen, T[cur].rlen);
+        cur=PARENT(cur);
+        if(cur){
+            T[cur].llen=T[LEFT(cur)].len;
+            T[cur].rlen=T[RIGHT(cur)].len;
+            T[cur].len=T[cur].llen+T[cur].rlen;
+            T[cur].cnt=T[cur].len==2?1:0;
+            cur=PARENT(cur);
+            while(cur>=0){
+                T[cur].llen=T[LEFT(cur)].cnt?(T[LEFT(cur)].len+T[RIGHT(cur)].llen):T[LEFT(cur)].llen;
+                T[cur].rlen=T[RIGHT(cur)].cnt?(T[RIGHT(cur)].len+T[LEFT(cur)].rlen):T[RIGHT(cur)].rlen;
+
+                if(T[LEFT(cur)].cnt&&T[RIGHT(cur)].cnt){
+                    T[cur].len=T[LEFT(cur)].len+T[RIGHT(cur)].len;
+                    T[cur].cnt=1;
+                }
+                else if(T[LEFT(cur)].cnt){
+                    T[cur].len=max(T[LEFT(cur)].len+T[RIGHT(cur)].llen, T[RIGHT(cur)].len);
+                    T[cur].cnt=0;
+                }
+                else if(T[RIGHT(cur)].cnt){
+                    T[cur].len=max(T[RIGHT(cur)].len+T[LEFT(cur)].rlen, T[LEFT(cur)].len);
+                    T[cur].cnt=0;
+                }
+                else{
+                    T[cur].len=max(T[LEFT(cur)].len, max(T[LEFT(cur)].rlen+T[RIGHT(cur)].llen, T[RIGHT(cur)].len));
+                    T[cur].cnt=0;
+                }
+                if(!cur) break;
+                cur=PARENT(cur);
+            }
+            
+        }else{
+            T[cur].len=T[LEFT(cur)].len+T[RIGHT(cur)].len;
+        }        
+        printf("%d\n", T[0].len);
+    }
+    return 0;
+}
