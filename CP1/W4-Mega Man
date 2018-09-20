@@ -1,0 +1,81 @@
+/*************************************
+Mega Man is off to save the world again. His objective is to kill the Robots created by Dr. Wily whose motive is to conquer the world. In each mission, he will try to destroy a particular Robot. Initially, Mega Man is equipped with a weapon, called the “Mega Buster” which can be used to destroy the Robots. Unfortunately, it may happen that his weapon is not capable of taking down every Robot. However, to his fortune, he is capable of using the weapons from Robots which he has completely destroyed and these weapons maybe able to take down Robots which he otherwise cannot with his own weapon.
+
+Note that, each of these enemy Robots carry exactly one weapon themselves for fighting Mega Man. He is able to take down the Robots in any order as long as he has at least one weapon capable of destroying the Robot at a particular mission. In this problem, given the information about the Robots and their weapons, you will have to determine thenumber of ways Mega Man can complete his objective of destroying all the Robots.
+
+Input Format
+
+Input starts with an integer T, the number of test cases.
+
+Each test case starts with an integer N. Here N denotes the number of Robots to be destroyed (each Robot is numbered from 1 to N). This line is followed by N + 1 lines, each containing N characters. Each character will either be ‘1’ or ‘0’. These lines represent a (N + 1) × N matrix. The rows are numbered from 0 to N while the columns are numbered from 1 to N. Row 0 represents the information about the “Mega Buster”. The j-th character of Row 0 will be ‘1’ if the “Mega Buster” can destroy the j-th Robot. For the remaining N rows, the j-th character of i-th row will be ‘1’ if the weapon of i-th Robot can destroy the j-th Robot. Note that, a Robot’s weapon could be used to destroy the Robot itself, but this will have no impact as the Robot must be destroyed anyway for its weapon to be acquired.
+
+Constraints
+
+T ≤ 50
+
+1 ≤ N ≤ 16
+
+Output Format
+
+For each case of input, there will be one line of output. It will first contain the case number followed by the number of ways Mega Man can complete his objective. Look at the sample output for exact format.
+
+Sample Input 0
+
+3
+1
+1
+1
+2
+11
+01
+10
+3
+110
+011
+100
+000
+Sample Output 0
+
+Case 1: 1
+Case 2: 2
+Case 3: 3
+*************************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+#define LL long long
+#define MS 1<<17
+int A[20], K[MS], n;
+LL dp[MS];
+char s[20];
+int main() {
+    int T;
+    scanf("%d", &T);
+    for(int z=1;z<=T;++z) {
+        scanf("%d", &n);
+        int tmp=0;
+        scanf("%s", s);
+        for(int i=0;i<n;++i) if(s[i]-'0') tmp|=1<<i;
+        for(int i=0;i<n;++i) {
+            A[i]=0;
+            scanf("%s", s);
+            for(int j=0; j<n; j++) if(s[j]-'0') A[i]|=1<<j;
+        }
+        int max=(1<<n)-1;
+        for(int s=0;s<=max;++s) {
+            K[s]=tmp;
+            for(int i=0;i<n;++i) if(s&(1<<i)) K[s]|=A[i];
+        }
+        dp[0]=1;
+        for(int s=1;s<=max;++s) {
+            dp[s]=0;
+            for(int i=0;i<n;++i) if((s&(1<<i))&&(K[s^(1<<i)]&(1<<i))) dp[s]+=dp[s^(1<<i)];
+        }
+        printf("Case %d: ", z);
+        printf("%lld\n", dp[max]);
+    }  
+    return 0;
+}
