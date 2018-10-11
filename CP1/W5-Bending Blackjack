@@ -1,0 +1,68 @@
+/***************************************
+The local blackjack club has recently gotten bored of traditional blackjack. They've started playing a variation where the deck size and the number to hit blackjack are changed. The club has also implemented custom cards (even with a value of zero) to spice up hitting! They've kept extensive logs of the decks of every game played, and have asked you to analyze them. They are eager to know how many ways they could have hit blackjack with the current ruleset.
+
+Input Format
+
+You will be given a single query which start with one line of values , which indicates the number required to hit blackjack, and , which indicates the number of cards in the deck.
+
+The following line will contain a sequence of  card values.
+
+Constraints
+1<=I<=1100
+1<=N<=1000
+0<=CardValue<=100
+
+Output Format
+
+You are to output an integer indicating how many sets of consecutive hits can result in Blackjack.
+
+Sample Input 0
+
+5 10
+1 2 3 4 5 6 7 8 9 10
+Sample Output 0
+
+2
+Explanation 0
+
+A total of 5 can be achieved with the hands [2,3] and [5]
+
+Sample Input 1
+
+8 6
+1 7 0 8 0 0
+Sample Output 1
+
+8
+Explanation 1
+
+A total of 8 can be achieved with the hands: [1,7], [1,7,0], [8], [0,8], [0,8,0], [0, 8, 0, 0], [8,0], and [8,0,0]
+****************************************/
+
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int rst;
+int main() {
+    int T, N;
+    cin>>T>>N;
+    int *pk=new int[N];
+    for(int i=0;i<N;cin>>pk[i++]);
+    for(int i=0;i<N;++i){
+        int sum=pk[i];
+        if(sum==T) ++rst;
+        if(i+1<N&&sum+pk[i+1]>T){
+            continue;
+        }
+        for(int j=i+1;j<N;++j){
+            sum+=pk[j];
+            if(sum==T) ++rst;
+            if(j+1<N&&sum+pk[j+1]>T) break;
+        }
+    }
+    cout<<rst;
+    return 0;
+}
