@@ -1,0 +1,63 @@
+/**********************************
+For those who got interviews from Microsoft in Computer Science Career Fair, congratulations! Your interview will be at 6pm in next week, which apparently will conflict with CS390CP lecture. Thinking about skipping the class secretly? NO WAY! However, you do have a chance to be absent from the class without penalty. To get it you have to solve a mock interview question first (I know, I know, we are sweet TAs. You are very welcome) In this question, you are given a sequence of numbers and two windows. Each window contains a subsequence of numbers (a subsequence has at least one number). Your task is to find the maximum sum you can possibly get from the two windows. These two windows cannot overlap each other.
+
+Input Format
+
+The first line contains one integer n representing the length of the sequence.
+
+The second line contains n integers (a[1] to a[n]) representing the sqeuence.
+
+Constraints
+
+2 <= n <= 1000000.
+
+-1000000 <= a[i] <= 1000000 (1 <= i <= n).
+
+Output Format
+
+The maximum sum you can possibly get from these two windows.
+
+Sample Input 0
+
+10
+1 -1 2 2 3 -3 4 -4 5 -5
+Sample Output 0
+
+13
+Explanation 0
+
+13 == [2,2,3,-3,4] + [5]
+***********************************/
+
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+#define INF 0x3f3f3f3f
+#define MAX(a, b) (a>b?a:b)
+int main() {
+    int N;
+    cin>>N;
+    vector<int> arr(N);
+    for(int i=0;i<N;++i) cin>>arr[i];
+    int rst=arr[0], s=0;
+    vector<int> l(N, 0), r(N, 0);
+    for(int i=0;i<N;++i){
+        s+=arr[i];
+        rst=MAX(rst, s);
+        l[i]=rst;
+    }
+    s=0, rst=arr[N-1];
+    for(int i=N-1;i>0;--i){
+        s+=arr[i];
+        rst=MAX(rst, s);
+        s=MAX(s, 0);
+        r[i]=rst;
+    }
+    rst=-INF;
+    for(int i=0;i<N-1;++i) rst=MAX(rst, l[i]+r[i+1]);
+    cout<<rst;
+    return 0;
+}
