@@ -1,0 +1,121 @@
+/**********************************************************
+Lawson hosts many Tech Talks. Some tech talks may be all fun and games, but that's not why you're there. You're there to talk to recruiters and get your resume in the system.
+
+image
+
+Which Tech Talks should you go to in order to have the most chances of being hired?
+
+Input Format
+
+You will be given a list of tech talks with start and end times, and the number of students they hire. The input will start with the number of talks (T), then a talk on each line. Each line will have a company name, start and end times in 24 hour format, then a number of students the company will hire (S). You can't go to two tech talks if one ends at the same time the other starts.
+
+Constraints
+
+15 <= T <= 25, 1 <= S <= 250, start < end
+
+Output Format
+
+List the companies that you should go to, one per line, in order of start time. At the end, print the total students all the companies you went to will hire.
+
+Sample Input 0
+
+16
+Netflix 407 1949 184
+Qualcomm 1002 2246 116
+Uber 512 1925 136
+Cisco 1040 1641 115
+IBM 1155 1644 162
+Facebook 249 1604 91
+Adobe 2124 2320 201
+Workday 1439 2328 76
+Sony 443 1121 66
+Oracle 2129 2232 192
+Hitachi 1401 2013 196
+Twitter 701 1313 185
+Microsoft 1431 2302 243
+Alphabet 419 2037 202
+Tesla 555 2151 71
+Nvidia 1335 1408 21
+Sample Output 0
+
+Twitter
+Hitachi
+Adobe
+582
+Sample Input 1
+
+22
+Cisco 249 2145 234
+Netflix 628 1414 148
+Oracle 122 1116 148
+Salesforce 12 713 245
+Adobe 814 1359 120
+Microsoft 143 537 228
+TI 923 2055 50
+Amazon 154 1614 170
+Twitter 826 939 122
+Qualcomm 225 2033 83
+Facebook 737 1024 13
+Dell 1558 1934 1
+HP 318 1929 128
+Workday 829 1227 250
+Apple 116 1620 112
+Nvidia 106 2355 192
+Airbnb 827 2128 219
+Intel 811 1510 51
+IBM 356 2206 23
+Tesla 147 1216 230
+Hitachi 430 1420 134
+Uber 1451 2005 61
+Sample Output 1
+
+Salesforce
+Workday
+Uber
+556
+***********************************************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+#define MAX(a, b) (a>b?a:b)
+typedef struct Node{
+    string s;
+    int st, et, nm;
+}Node;
+bool CMP(Node n1, Node n2) {return (n1.et<n2.et);}
+int main() { 
+    int n;
+    cin>>n;
+    Node *arr=new Node[n];
+    for(int i=0;i<n;++i) cin>>arr[i].s>>arr[i].st>>arr[i].et>>arr[i].nm;
+    sort(arr, arr+n, CMP);
+    vector<int> dp(n);
+    vector<vector<int>> lst(n);
+    dp[0] = arr[0].nm;
+    lst[0].push_back(0);
+    for(int i=1;i<n;++i){ 
+        int sum=arr[i].nm, l=-1;
+        for(int j=i-1;j>=0;--j)
+            if(arr[j].et<=arr[i].st){
+                l=j;
+                break;
+            }
+        if(l!=-1) sum+=dp[l];
+        if(sum>dp[i-1]){
+            dp[i]=sum;
+            lst[i]=lst[l];
+            lst[i].push_back(i);
+        }else{
+            dp[i]=dp[i-1];
+            lst[i]=lst[i-1];
+        }
+    }
+    for(int i=0;i<lst[n-1].size();++i){
+        cout<<arr[lst[n-1][i]].s<<endl;
+    }
+    cout<<dp[n-1];
+    return 0;
+}
