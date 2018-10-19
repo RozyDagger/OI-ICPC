@@ -95,10 +95,9 @@ int main() {
     MP.clear();
     for(int i=0;i<ia;++i){
         cin>>sa>>sb>>sc;
-        StoI(sa);
-        StoI(sc);
-        if(sb[0]=='i') ID[StoI(sa)][StoI(sc)]=1;
-        else if(sb[0]=='h') RE[StoI(sa)][StoI(sc)]=1;
+        int a=StoI(sa), b=StoI(sc);
+        if(sb[0]=='i') ID[a][b]=1;
+        else if(sb[0]=='h') RE[a][b]=1;
     }
     for(int i=0;i<CNT;BFS(i++));
     for(int i=1;i<=ib;++i){
