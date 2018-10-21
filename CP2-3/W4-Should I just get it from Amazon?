@@ -1,0 +1,117 @@
+/*******************************************
+For some reason, Daniel loves to collect and watch operas on DVD. He can find and order all the operas he wants from Amazon, and they will even deliver them right to his door, but he can usually find a better price at one of his favourite stores. However, with the cost of gas nowadays, it is hard to tell whether or not one would actually save money by driving to the stores to purchase the DVDs.
+
+Daniel would like to buy some operas today. For each of the operas he wants, he knows exactly one store that is selling it for a lower cost than the Amazon price. He would like to know if it would actually be worth it to go out and buy the operas from the stores.
+
+Daniel only knows the road system connecting his favourite stores, and will only use those roads to get around. He knows at least one route, if only an indirect one, to every store
+
+In his shopping trip, Daniel begins at his house, drives from store to store in any order to purchase his operas, then drives back to his house. For any particular opera, he can opt not to drive to the store to buy it, since he can just order it from Amazon.
+
+For convenience, Daniel assigned his house the integer 0, and numbered each of his favourite stores with integers starting at 1. You are given a description of the road system and the exact amount it would cost for Daniel to drive each road. For each opera Daniel wants, you are given the number of the store it is available at, and the amount he would save if he bought that particular opera at that store.
+
+Your task is to determine the greatest amount of money Daniel can save by making the shopping trip
+
+Input Format
+
+The first line of input contains a single number indicating the number of scenarios to process. A blank line precedes each scenario.
+
+Each scenario begins with line containing two numbers: N (1 ≤ N ≤ 50), the number of stores, and M (1 ≤ M ≤ 1000), the number of roads. The following M lines each contain a description of a road.
+
+Each road is described by two integers indicating the house or stores it connects, and a real number with two decimal digits indicating the cost in dollars to drive that road. All roads are two-way.
+
+The next line in the scenario contains a number P (1 ≤ P ≤ 12), the number of opera DVDs Daniel wants to buy. For each of the P operas, a line follows containing an integer indicating the store number at which the opera is available, and a real number with two decimal digits indicating the difference between the Amazon price and the price at that store in dollars.
+
+Constraints
+
+(1 ≤ N ≤ 50)
+(1 ≤ M ≤ 1000)
+(1 ≤ P ≤ 12)
+Output Format
+
+For each scenario in the input, write one line of output indicating the largest amount of money, in dollars and cents, that Daniel can save by making his shopping trip.
+
+Follow the format of the sample output; there should always be two digits after the decimal point to indicate the number of cents.
+
+If Daniel cannot save any money by going to the stores, output a single line saying ‘Don’t leave the house’.
+
+Sample Input 0
+
+2
+
+4 5
+0 1 1.00
+1 2 3.00
+1 3 2.00
+2 4 4.00
+3 4 3.25
+3
+2 1.50
+3 7.00
+4 9.00
+
+1 1
+0 1 1.50
+1
+1 2.99
+Sample Output 0
+
+Daniel can save $3.50
+Don't leave the house
+*******************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAXN 13
+#define INF 0xfffffffffLL
+#define LL long long
+#define MIN(a, b) (a<b?a:b)
+#define MAX(a, b) (a>b?a:b)
+LL DP[1<<MAXN][MAXN], G[51][51];
+int A1[MAXN], A2[MAXN], B;
+int TSP(int s, int n, int l) {
+    if(!s) return 0;
+    if(DP[s][l]!=-INF) return DP[s][l];
+    LL m=-INF, t;
+    for(int i=0;i<=n;++i)
+        if(s&(1<<i)&&l!=i){
+            t=TSP(s-(1<<l), n, i);
+            t=t-G[A1[i]][A1[l]]+A2[l];
+            m=MAX(m, t);
+        }
+    if(s==(1<<l)) m=-G[A1[l]][0]+A2[l];
+    if(B<m-G[A1[l]][0]) B=m-G[A1[l]][0];
+    DP[s][l]=m;
+    return DP[s][l];
+}
+int main() {
+    int TC, N, M, n1, n2, a, b, pr;
+    scanf("%d", &TC);
+    while(TC--){
+        scanf("%d%d", &N, &M);
+        for(int i=0;i<=N;++i) for(int j=0;j<=N;G[i][j++]=INF);
+        for(int i=0;i<M;++i) {
+            scanf("%d %d %d.%d", &n1, &n2, &a, &b);
+            G[n1][n2]=MIN(100*a+b, G[n1][n2]);
+            G[n2][n1]=MIN(100*a+b, G[n2][n1]);
+        }
+        scanf("%d", &pr);
+        int np=0, t[51]={0}, r=(1<<(pr+1))-1;
+        for(int i=1;i<=pr;++i){
+            scanf("%d %d.%d",A1+i, &a, &b);
+            t[A1[i]]+=100*a+b;
+        }
+        for(int i=1;i<=N;++i)
+            if(t[i]){
+                A1[++np]=i;
+                A2[np]=t[i];
+            }
+        pr=np;
+        for(int k=0;k<=N;++k) for(int i=0;i<=N;++i) for(int j=0;j<=N;++j) if(G[i][j]>G[i][k]+G[k][j]) G[i][j]=G[i][k]+G[k][j];
+        for(int i=0;i<=r;++i) for(int j=0;j<=pr;DP[i][j++]=-INF);
+        G[0][0]=B=0;
+        TSP(r, pr, 0);
+        if(B) printf("Daniel can save $%d.%02d\n", B/100, B%100);
+        else printf("Don't leave the house\n");
+    }
+    return 0;
+}
