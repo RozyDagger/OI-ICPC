@@ -1,0 +1,74 @@
+/***************************************
+The Council of Ricks have had it with Rick C-132. They have sent a army of Rick clones to Earth to bring him down.
+
+Rick unfortunately got really hungover last night and is in no fighting state. It is upto Morty to save the day! Rick mumbles directions to Morty on how to use his laser gun to disable these clones. Help Morty use this gun.
+
+There are n clones that Morty needs to take out. The battle field is a plane with Cartesian coordinate system. Each clone is associated with his coordinates (x, y) on this plane. Morty is standing at the point (x0, y0).
+
+Morty can use the gun to shoot a laser in a straight line, and all clones in this line get disabled, i.e., in one shot it can can destroy all the clones situated on some line that crosses point (x0, y0).
+
+However the gun gets really hot, so Morty wants to know the minumum number of times he needs to shoot the gun. The gun is very advanced, it shoots very quickly and even after a very large number of shots the clones don't have enough time to realize what's happening and change their location.
+
+Input Format
+
+The first line contains three integers n, x0, y0 — the number of clones on the battle field and the coordinates of Morty.
+
+Next n lines contain two integers each xi, yi — the coordinates of the clones on the battlefield. It is guaranteed that no clone stands at the same point with the gun. Multiple clones can stand at the same point.
+
+Constraints
+
+1 ≤ n ≤ 1000,
+-10^4  ≤  x0, y0  ≤  10^4
+-10^4  ≤  xi, yi  ≤  10^4
+Output Format
+
+Print a single integer — the minimum number of shots Morty needs to destroy all the clones.
+
+Sample Input 0
+
+4 0 0
+1 1
+2 2
+2 0
+-1 -1
+Sample Output 0
+
+2
+Explanation 0
+
+(-1,-1) , (1,1), (2,2) 1st shot (2,0) 2nd shot
+
+Sample Input 1
+
+2 1 2
+1 1
+1 0
+Sample Output 1
+
+1
+Explanation 1
+
+All points are on the same line
+***************************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <set>
+#include <algorithm>
+using namespace std;
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    int n, x, y;
+    cin>>n>>x>>y;
+    double *SL=new double[n];
+    set<double> S;
+    for(int i=0;i<n;++i){
+        int a, b;
+        cin>>a>>b;
+        double tx=x-a, ty=y-b;
+        S.insert(ty/tx);
+    }
+    cout<<S.size();
+    return 0;
+}
