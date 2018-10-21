@@ -1,0 +1,89 @@
+/*****************************************
+Don't you like Skylines? I love at staring at skylines and just wonder at its magnificence. Sometimes I get deep in lost in thought about life, sometimes I think about silly things. For example, is the skyline increasing or decrasing?
+
+Looking at any skyline from left to right, we have a series of N buildings. Each building has its own height and width. Please help me find if the skyline is increasing or decreasing.
+
+We say the skyline is increasing if the longest increasing subsequence of buildings is bigger or equal than the longest decreasing subsequence of buildings; in other case, we say it is decreasing. A subsequence is a subset of the original sequence, in the same order. The length of a subsequence of buildings is the sum of the widths of its elements.
+
+For example, assuming we have six buildings of heights: 10, 100, 50, 30, 80, 10; and widths: 50, 10, 10, 15, 20, 10; then we have an increasing subsequence of 3 buildings and total length 85, and a decreasing subsequence of 1 building and total length 50 (also, there is a decreasing subsequence of 4 buildings and length 45). So, in this case, we say that the skyline is increasing. 
+
+Input Format
+
+The first line of the input contains an integer T indicating the number of test cases.
+
+For each test case, the first line contains a single integer, N, indicating the number of buildings of the skyline. Then, there are two lines, each with N integers separated by blank spaces. The first line indicates the heights of the buildings, from left to right. The second line indicates the widths of the buildings, also from left to right.
+
+Constraints
+
+1 <= T <= 100
+1 <= N <= 500
+Output Format
+
+For each test case, the output should contain a line. If the skyline is increasing, the format will be:
+
+Case i. Increasing (A). Decreasing (B).
+
+If the skyline is decreasing, the format will be: Case i. Decreasing (B). Increasing (A).
+
+where i is the number of the corresponding test case (starting with 1), A is the length of the longest increasing subsequence, and B is the length of the longest decreasing subsequence.
+
+Sample Input 0
+
+3
+6
+10 100 50 30 80 10
+50 10 10 15 20 10
+4
+30 20 20 10
+20 30 40 50
+3
+80 80 80
+15 25 20
+Sample Output 0
+
+Case 1. Increasing (85). Decreasing (50).
+Case 2. Decreasing (110). Increasing (50).
+Case 3. Increasing (25). Decreasing (25).
+*****************************************/
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+#define MAXN 10010
+#define MAX(a, b) (a>b?a:b)
+int A[MAXN], V[MAXN], dp[MAXN], W[MAXN];
+int main(){
+    int T;
+    scanf("%d",&T);
+    for(int k=1;k<=T;k++){
+        int n;
+        scanf("%d",&n);
+        for(int i=1;i<=n;i++)scanf("%d", A+i);
+        for(int i=1;i<=n;i++)scanf("%d", V+i);
+        for(int i=1;i<=n;i++){
+            dp[i]=1;
+            W[i]=V[i];
+            for(int j=1;j<i;j++)
+                if(A[i]>A[j]&&W[i]<W[j]+V[i]){
+                    dp[i]=dp[j]+1;
+                    W[i]=W[j]+V[i];
+                }
+        }
+        int IA=0, DE=0;
+        for(int i=1;i<=n;i++) IA=MAX(IA,W[i]);
+        for(int i=1;i<=n;i++){
+            dp[i]=1;
+            W[i]=V[i];
+            for(int j=1;j<i;j++)
+                if(A[i]<A[j]&&W[i]<W[j]+V[i]){
+                    dp[i]=dp[j]+1;
+                    W[i]=W[j]+V[i];
+                }
+        }
+        for(int i=1;i<=n;i++) DE=MAX(DE,W[i]);
+        if(IA>=DE) printf("Case %d. Increasing (%d). Decreasing (%d).\n", k, IA, DE);
+        else printf("Case %d. Decreasing (%d). Increasing (%d).\n", k, DE, IA);
+        }
+    return 0;
+}
