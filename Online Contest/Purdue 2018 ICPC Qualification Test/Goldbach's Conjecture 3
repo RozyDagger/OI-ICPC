@@ -1,0 +1,64 @@
+/*******************************************
+Mr. Goldbach, not the great mathematician though, currently lives in East Lafayette, a place with a very weird tax laws for income. Now mr. Goldbach is required to pay tax for his total income of  dollars. The amount of tax he is supposed to pay is equal to the maximum divisor of  , but not equal to  of course. For instance, if n = 4, mr. Goldbach has to pay 2 dollars; if n = 6, he has to pay 3 dollars; if n = 2, he has to pay only 1 dollar.
+
+While mr. Goldbach is not the great mathematician, he does have some math skill and therefore he wants to cheat a little bit around this tax laws. Specifically, he wants to break his total income into pieces and pay tax for each piece respectively. Suppose he has to pay tax for income of , he can split  into parts , where  is arbitrary and can range from 1 to infinite large. It should be noticed that he does not want to make any part equal to 1 since it would be obvious for the tax department to find out his plan. ( for all  from  to )
+
+For your task, you have to find out what is the minimum amount of tax mr. Goldbach has to pay, given his total income, if he adopts the optimal way to split it.
+
+Input Format
+
+The first line contains a interer  , the total income of mr. Goldbach.
+
+Constraints
+
+
+Output Format
+
+Print a single interger, which is the minimum possible amount of tax that mr. Goldbach has to pay.
+
+Sample Input 0
+
+4
+Sample Output 0
+
+2
+Explanation 0
+
+You can either keep it as a single piece or split it into 2 + 2.
+
+Sample Input 1
+
+27
+Sample Output 1
+
+3
+*******************************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+#define LL long long
+bool iP(LL n){
+    LL i=2;
+    while(i*i<=n){
+        if(!(n%i)) return false;
+        ++i;
+    }
+    return true;
+}
+LL run(LL n){
+    if(iP(n)) return 1;
+    if(!(n%2)) return 2;
+    if(iP(n-2)) return 2;
+    return 3;
+}
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    long long n;
+    cin>>n;
+    cout<<run(n);
+    return 0;
+}
