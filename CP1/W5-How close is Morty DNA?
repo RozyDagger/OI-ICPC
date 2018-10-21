@@ -1,0 +1,101 @@
+/*****************************************
+Morty is having a hard time at school dealing with bullies. He begs Rick to help him out by teaching the bullies a lesson.
+
+Rick, being drunk atm, comes up with the genious plan to give Morty super humans powers by modifiying his DNA with other animals who have special capabilietes.
+
+In order to merge Morty's DNA with the target DNA temporarily, Rick is allowed 3 kinds of operations.
+
+The operations are :-
+
+Insert -- Rick can insert a DNA sub-element in either Morty's DNA or the animal DNA at a specified location
+Remove -- Rick can remove a DNA sub-element in either Morty's DNA or the animal DNA at a specified location
+Replace -- Rick can replace a DNA sub-element with another element in either Morty's DNA or the animal DNA at a specified location
+Each operation has a specific cost assosiated with it.
+
+Modifying one's DNA is a not an easy feat, easpeacially with Rick being drunk. Given Morty's original DNA and a list of potential DNAs, find the potential DNA(s) that are cheapest to convert using the specified operations.
+
+Examples
+
+Consider the words “CAT” and “BAT”. The two words only differ in their first character. We only need to replace the ‘C’ in “CAT” with a ‘B’ to arrive at “BAT”. Therefore the cost of operation is 1.
+
+The words “FLY” and “FLYING” are identical in their first three characters, but the second word has three additional characters. Adding “ING” to the first word produces the second word. The cost of operation is 3 in this case.
+
+Consider “GRAVE” and “GROOVY”. We can perform the following substitutions in the first word: (1) ‘A’ → ‘O’, (2) ‘E’ → ‘Y’, then (3) insert the character ‘O’ in position 4 (after the first ‘O’).
+
+Thus, the cost of operation is 3 in this case.
+
+Input Format
+
+The first line of input contains 4 integers seperated by whitespace
+
+number of potential DNA, N
+cost_insert, CI
+cost_remove, CRM
+cost_replace, CRP
+The second line contains Morty's DNA, MDNA
+
+The next n lines contain the potential DNA. Each line is an new word which ends with a '\n'. Make sure to strip your input of extra whitespaces and new line characters.
+
+Constraints
+
+Number of words to compare (1 ≤ N ≤ 50)
+Length of each word in character ( 1 <= len(word) <= 60)
+uppercase alphabetic letters only.
+Output Format
+
+In the firt line, print the minimum cost of operations you calculated
+Output the list of potential DNA with minimum distance w.r.t. Morty's DNA.
+In case there are multiple answers, sort them by lexicographical order.
+Sample Input 0
+
+3 7 2 4
+biqlid
+datvl
+pckwka
+deocm
+Sample Output 0
+
+22
+datvl
+deocm
+*****************************************/
+#include<bits/stdc++.h>
+using namespace std;
+#define INF 0x3F3F3F3F
+int in, rm, rp, n, rst=10000;
+set<string> lst;
+int min(int x, int y, int z){
+    return min(min(x, y), z);
+}
+int run(string s1, string s2, int m, int n){
+    int dp[m+1][n+1];
+    for(int i=0;i<=m;++i)
+        for(int j=0;j<=n;++j){
+            if(!i) dp[i][j]=j*in;
+            else if(!j) dp[i][j]=i*rm;
+            else if(s1[i-1]==s2[j-1]) dp[i][j]=dp[i-1][j-1];
+            else dp[i][j]=min(dp[i][j-1]+in, dp[i-1][j]+rm, dp[i-1][j-1]+rp);
+        }
+    return dp[m][n];
+}
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    scanf("%d %d %d %d", &n, &in, &rm, &rp);
+    string dst;
+    cin>>dst;
+    for(int i=0;i<n;++i){
+        string src;
+        int l1=src.length(), l2=dst.length();
+        cin>>src;
+        int tmp=run(dst, src, dst.length(), src.length());
+        if(rst==tmp) lst.insert(src);
+        else if(rst>tmp){
+            rst=tmp;
+            lst.clear();
+            lst.insert(src);
+        }
+    }
+    cout<<rst<<endl;
+    for(set<string>::iterator itr=lst.begin();itr!=lst.end();++itr) cout<<*itr<<endl;
+    return 0;
+}
