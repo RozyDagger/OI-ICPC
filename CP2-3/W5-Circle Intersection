@@ -1,0 +1,72 @@
+/**********************************************
+Two circles may intersect in two imaginary points(no intersection) , a single degenerate point, or two distinct points.
+
+For this problem, given two circles with coordinates x, y and the radius r, find the coordinates of the intersections points.
+
+Input Format
+
+The first line contains three integers: x y r of the first circle
+
+The second line contains three integers: x y r of the second circle
+
+Constraints
+
+-100 <= x <= 100
+
+-100 <= y <= 100
+
+-100 <= r <= 100
+
+Output Format
+
+If there is no intersection, print "No Intersection".
+
+If there is only one intersection, print the coordinates of the intersection.
+
+If there are two intersections, print the coordinates of both intersection with leftr one comes first.
+
+The output coordinates are rounded to 2 decimal places.
+
+Sample Input 0
+
+0 0 1
+1 0 1
+Sample Output 0
+
+0.50 0.87
+0.50 -0.87
+Sample Input 1
+
+0 0 1
+2 0 1
+Sample Output 1
+
+1.00 0.00
+Sample Input 2
+
+0 0 1
+3 0 1
+Sample Output 2
+
+No Intersection
+**********************************************/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int main() {
+    double x1, y1, r1, x2, y2, r2;
+    scanf("%lf%lf%lf%lf%lf%lf", &x1, &y1, &r1, &x2, &y2, &r2);
+    double d=sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+    if(d>r1+r2||d<abs(r1-r2)) printf("No Intersection");
+    else{
+        double ex=(x2-x1)/d, ey=(y2-y1)/d;
+        double tx=(r1*r1-r2*r2+d*d)/(2*d), ty=sqrt(r1*r1-tx*tx);
+        double X1=x1+tx*ex-ty*ey, Y1=y1+tx*ey+ty*ex, X2=x1+tx*ex+ty*ey, Y2=y1+tx*ey-ty*ex;
+        if(d==r1+r2||d==abs(r1-r2)) printf("%.2lf %.2lf", X1, Y1);
+        else printf("%.2lf %.2lf\n%.2lf %.2lf", X1, Y1, X2, Y2);
+    }
+    return 0;
+}
