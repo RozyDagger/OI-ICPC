@@ -1,0 +1,33 @@
+//http://acm-ecna.ysu.edu/PastResults/2016/ecna2016.pdf
+#include <bits/stdc++.h>
+using namespace std;
+vector<int> V[3];
+int flag=1, n, x;
+long long rst=0;
+void DFS(int s, vector<int> &a, vector<int> &b, vector<int> &c){
+    if(!s) return;
+    int f1=(a.size()&&a[0]==s), f2=(c.size()&&c[0]==s);
+    flag=!(!f1&&!f2);
+    if(!flag) return;
+    if(f1){
+        rst+=(1LL<<(s-1));
+        a.erase(a.begin());
+        DFS(s-1, a, c, b);
+    }else if(f2){
+        c.erase(c.begin());
+        DFS(s-1, b, a, c);
+    }
+}
+int main(){
+    for(int i=0;i<3;++i){
+        scanf("%d", &n);
+        for(int j=0;j<n;++j){
+            scanf("%d", &x);
+            V[i].push_back(x);
+        }
+    }
+    DFS(V[0].size()+V[1].size()+V[2].size(), V[0], V[1], V[2]);
+    if(flag) printf("%lld\n", rst);
+    else printf("No");
+    return 0;
+}
