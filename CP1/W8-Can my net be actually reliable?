@@ -1,0 +1,111 @@
+/****************************************
+You’re in charge of designing a campus network between buildings and are very worried about its reliability and its cost. So, you’ve decided to build some redundancy into your network while keeping it as inexpensive as possible. Specifically, you want to build the cheapest network so that if any one line is broken, all buildings can still communicate. We’ll call this a minimal reliable net
+
+Input Format
+
+There will be multiple test cases for this problem.
+
+Each test case will start with a pair of integers n and m on a line indicating the number of buildings (numbered 1 through n) and the number of potential inter-building connections, respectively. (Values of n = m = 0 indicate the end of the problem.)
+
+The following m lines are of the form b1 b2 c (all positive integers) indicating that it costs c to connect building b1 and b2. All connections are bidirectional.
+
+Constraints
+
+n (≤ 15)
+m (≤ 20)
+Output Format
+
+For each test case you should print one line giving the cost of a minimal reliable net.
+
+If there is a minimal reliable net, the output line should be of the form:
+
+The minimal cost for test case p is c.
+
+where p is the number of the test case (starting at 1) and c is the cost.
+
+If there is no reliable net possible, output a line of the form:
+
+There is no reliable net possible for test case p.
+
+Sample Input 0
+
+4 5
+1 2 1
+1 3 2
+2 4 2
+3 4 1
+2 3 1
+2 1
+1 2 5
+0 0
+Sample Output 0
+
+The minimal cost for test case 1 is 6.
+There is no reliable net possible for test case 2.
+****************************************/
+#include <string.h>
+#include <iostream>
+#include <cmath>
+using namespace std;
+#define INF 0x3F3F3F3F
+struct edge{
+    int u,v,c;
+}E[21];
+int m, n, rst, CNT, T, ST, MAX, G[21][21], N[21], D[21], L[21], V[21];
+int cntBt(int t){
+    int x=0;
+    for(;t;x+=t&1, t>>=1);
+    return x;
+}
+int calBt(int t){
+    int x=0;
+    for(int i=0;i<m;x+=ST&(1<<i)?E[i].c:0, ++i);
+    return x;
+}
+int dfs(int x){
+    if(D[x]) return D[x];
+    L[x]=D[x]=T++;
+    for(int i=0;i<N[x];++i)
+        if(V[G[x][i]]==0&&((1<<G[x][i])&ST)){
+            V[G[x][i]]=1;
+            L[x]=min(L[x], dfs(x==E[G[x][i]].u?E[G[x][i]].v:E[G[x][i]].u));
+        }
+    return L[x];
+}
+int main(){
+    while(scanf("%d%d", &n, &m)==2&&n&&m){
+        MAX=1<<m;
+        rst=INF;
+        memset(N, 0, sizeof(N));
+        for(int i=0;i<m;++i){
+            scanf("%d%d%d", &E[i].u, &E[i].v, &E[i].c);
+            G[E[i].u][N[E[i].u]++]=i;
+            G[E[i].v][N[E[i].v]++]=i;
+        }
+        if(m<n){
+            printf("There is no reliable net possible for test case %d.\n", ++CNT);
+            continue;
+        }
+        for(ST=0;ST<MAX;++ST){
+            if(cntBt(ST)<n) continue;
+            T=1;
+            memset(D, 0, sizeof(D));
+            memset(L, 0, sizeof(L));
+            memset(V, 0, sizeof(V));
+            for(int i=1;i<=n;++i)
+                if(!D[i]){
+                    dfs(i);
+                    break;
+                }
+            int flag=0;
+            for(int i=1;i<=n&&!flag;flag=(!D[i++]));
+            if(flag) continue;
+            for(int i=0;i<m&&!flag;flag=((1<<i)&ST)&&((D[E[i].u]>D[E[i].v]&&L[E[i].u]>D[E[i].v])||(D[E[i].v]>D[E[i].u]&&L[E[i].v]>D[E[i].u])), ++i);
+            if(flag) continue;
+            rst=min(rst, calBt(ST));
+        }
+        if(rst==INF) printf("There is no reliable net possible for test case %d.\n", ++CNT);
+        else printf("The minimal cost for test case %d is %d.\n", ++CNT, rst);
+    }
+    return 0;
+}
