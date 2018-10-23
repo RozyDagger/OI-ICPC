@@ -1,0 +1,134 @@
+/***********************************
+Richard and Morticus find themselves stranded in a bustling alien market without Richard's famous interdimensional air rifle to transport them back home.
+
+Richard has 2 Blumbuses in his back pocket, and he thinks that with his charisma he could barter his way up to the components necessary to re-assemble an interdimensional air rifle.
+
+The problem is Richard doesn't know how to talk to these aliens!
+
+Thankfully, Richard implanted a custom "BAB3L-415H" Universal Translator into Morticus's brain. Richard simply unscrews a bolt from Morticus's head, and voila, the unit (as well as a sizable chunk of Morticus's brain) are now exposed and ready for tinkering.
+
+Richard first provides the translator with a series of N pairs of languages that may be translated directly between one another, as well as the name of the translator device that works to translate between them.
+
+He will then be provided M pairs of languages and he must determine if a device can be constructed that can translate between them.
+
+Note that since this is inside of Morticus's sensitive, squishy brain, Richard wants to minimize the number of translators he shoves together so that the device doesn't make brain stew out of his grand-nephew.
+
+Input Format
+
+You are provided a number N, which is the number of language pairs + their translators you will encounter.
+
+N languages + translator triplets separated by spaces follow.
+
+You will then be provided a number M indicating the number of pairs of languages that you'd like to find the translation of.
+
+M pairs of languages follow.
+
+Constraints
+
+N < 100
+M < 10000
+Output Format
+
+You will output M integers on their own lines, which represent the minimum number of translators Richard needs to put together in Morticus's head to have a successful conversation with the aliens.
+
+If there exists NO Combination of translators that would enable translation, output "-1".
+
+
+Sample Input 0
+
+5
+Blumblese Numblespeak Modifier_MkII
+Blumblese Trumblespeak Codifier_V1
+Trumblespeak English Rosetta_Groaned_V2
+Numblespeak Aakath Guttural_Noises_3
+Aakath English Sounds_Of_Screaming_Tape_1
+7
+English English
+Aakath English 
+English Aakath 
+Trumblespeak Aakath
+Blumblese Aakath
+English German
+German German
+
+Sample Output 0
+
+0
+1
+1
+2
+2
+-1
+0
+
+Explanation
+
+There is no need for a translator between the same language and itself.
+There is a direct connection between Aakath and English.
+See above
+The shortest number of jumps between Trumblespeak and Aakath is 2.
+The shortest number of jumps between Blumblese and Aakath is 2.
+There is no translator for English to German.
+German was not included among the original languages, but it is still connected to itself.
+************************************/
+#include <bits/stdc++.h>
+using namespace std;
+#define MAXN 105
+#define INF 0x3F3F3F3F
+int n, m, cnt, d[MAXN];
+vector<int> G[MAXN];
+map<string, int> mp;
+void run(int a, int b){
+    int d[n], V[n];
+    list<int> Q;
+    for(int i=0;i<n;V[i]=0, d[i++]=INF);
+    V[a]=1, d[a]=0, Q.push_back(a);
+    while(!Q.empty()){
+        int u=Q.front();Q.pop_front();
+        for(int i=0;i<G[u].size();++i)
+            if(!V[G[u][i]]){
+                V[G[u][i]]=1;
+                d[G[u][i]]=d[u]+1;
+                Q.push_back(G[u][i]);
+                if(G[u][i]==b){
+                    cout<<d[b]<<endl;
+                    return;
+                }
+            }
+    }
+    cout<<"-1"<<endl;
+} 
+int main() {
+    cin>>n;
+    for(int i=0;i<n;++i){
+        string l1, l2, c;
+        int a, b;
+        cin>>l1>>l2>>c;
+        map<string, int>::iterator itr1=mp.find(l1), itr2=mp.find(l2);
+        if(itr1==mp.end()){
+            mp.insert(pair<string, int>(l1, cnt));
+            a=cnt++;
+        }else a=itr1->second;
+        if(itr2==mp.end()){
+            mp.insert(pair<string, int>(l2, cnt));
+            b=cnt++;
+        }else b=itr2->second;
+        G[a].push_back(b), G[b].push_back(a);
+    }
+    cin>>m;
+    for(int i=0;i<m;++i){
+        string l1, l2;
+        cin>>l1>>l2;
+        if(l1==l2){
+            cout<<"0"<<endl;
+            continue;
+        }
+        map<string, int>::iterator itr1=mp.find(l1), itr2=mp.find(l2);
+        if(itr1==mp.end()||itr2==mp.end()){
+            cout<<"-1"<<endl;
+            continue;
+        }
+        run(itr1->second, itr2->second);
+    }
+    return 0;
+}
