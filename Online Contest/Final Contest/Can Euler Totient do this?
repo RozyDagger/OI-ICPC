@@ -47,23 +47,22 @@ Sample Output 0
 #include <algorithm>
 using namespace std;
 int n, t, p;
-int phi(int x) {
+int phi(int x){
     int rst=x;
     for(int p=2;p*p<=x;++p)
         if(!x%p){
             while(!x%p) x/=p; 
             rst-=rst/p; 
         } 
-    if (x>1) rst-=rst/x; 
+    if(x>1) rst-=rst/x; 
     return rst; 
 }
-
 int run(int x){
     int rst=1;
     for(int i=1;i<=x;++i) rst+=phi(i);
     return rst;
 }
-int main() {
+int main(){
     cin>>n;
     while(n--){
         cin>>t>>p;
