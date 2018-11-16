@@ -48,12 +48,9 @@ The string {[()]} meets both criteria for being a balanced string, so we print Y
 The string {[(])} is not balanced because the brackets enclosed by the matched pair { and } are not balanced: [(]).
 The string {{[[(())]]}} meets both criteria for being a balanced string, so we print YES on a new line.
 ************************************/
-
 #include <bits/stdc++.h>
 #include <stack>
 using namespace std;
-
-// Complete the isBalanced function below.
 string isBalanced(string s) {
     stack<char> st;
     size_t len=s.length();
@@ -71,25 +68,17 @@ string isBalanced(string s) {
     }
     return st.empty()?"YES":"NO";
 }
-
-int main()
-{
+int main(){
     ofstream fout(getenv("OUTPUT_PATH"));
-
     int t;
     cin >> t;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
     for (int t_itr = 0; t_itr < t; t_itr++) {
         string s;
         getline(cin, s);
-
         string result = isBalanced(s);
-
         fout << result << "\n";
     }
-
     fout.close();
-
     return 0;
 }
