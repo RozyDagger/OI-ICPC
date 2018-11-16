@@ -48,16 +48,14 @@ Sample Output 0
 using namespace std;
 int n, t, p;
 int phi(int x) {
-    int result = x;
-    for (int p = 2; p * p <= x; ++p) {
-        if (x % p == 0) {
-            while (x % p == 0) x /= p; 
-            result -= result / p; 
+    int rst=x;
+    for(int p=2;p*p<=x;++p)
+        if(!x%p){
+            while(!x%p) x/=p; 
+            rst-=rst/p; 
         } 
-    }
-    if (x > 1) 
-        result -= result / x; 
-    return result; 
+    if (x>1) rst-=rst/x; 
+    return rst; 
 }
 
 int run(int x){
