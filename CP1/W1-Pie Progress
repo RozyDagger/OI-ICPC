@@ -120,8 +120,7 @@ void run(){
     printf("%d\n", dp[n][n]);
 }
 
-int main()
-{
+int main(){
     int n, c = 1;
     scanf("%d", &n);
     while (n>0){
