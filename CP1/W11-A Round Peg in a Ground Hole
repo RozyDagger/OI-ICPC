@@ -1,0 +1,104 @@
+/*******************************************
+The DIY Furniture company specializes in assemble-it-yourself furniture kits. Typically, the pieces of wood are attached to one another using a wooden peg that fits into pre-cut holes in each piece to be attached. The pegs have a circular cross-section and so are intended to fit inside a round hole. A recent factory run of computer desks were flawed when an automatic grinding machine was mis-programmed. The result is an irregularly shaped hole in one piece that, instead of the expected circular shape, is actually an irregular polygon. You need to figure out whether the desks need to be scrapped or if they can be salvaged by filling a part of the hole with a mixture of wood shavings and glue. There are two concerns. First, if the hole contains any protrusions (i.e., if there exist any two interior points in the hole that, if connected by a line segment, that segment would cross one or more edges of the hole), then the filled-in-hole would not be structurally sound enough to support the peg under normal stress as the furniture is used. Second, assuming the hole is appropriately shaped, it must be big enough to allow insertion of the peg. Since the hole in this piece of wood must match up with a corresponding hole in other pieces, the precise location where the peg must fit is known. Write a program to accept descriptions of pegs and polygonal holes and determine if the hole is ill-formed and, if not, whether the peg will fit at the desired location. Each hole is described as a polygon with vertices (x1, y1), (x2, y2), . . . , (xn, yn). The edges of the polygon are (xi, yi) to (xi+1, yi+1) for i = 1 . . . n − 1 and (xn, yn) to (x1, y1).
+
+Input Format
+
+Multiple test cases.
+
+Line 1 --- < nVertices > < pegRadius > < pegX > < pegY >
+
+< nVertices >: number of vertices in polygon, n (integer)
+
+< pegRadius >: radius of peg (real)
+
+< pegX >, < pegY >: X and Y position of peg (real)
+
+Following n Lines ---- < vertexX > < vertexY >
+
+< vertexX >, < vertexY >: X and Y position of each vertex
+
+The end of input is indicated by a number of polygon vertices less than 3.
+
+Constraints
+
+Use double for real numbers and int for integers.
+
+Output Format
+
+For each piece description, print a single line containing one of the strings below:
+
+HOLE IS ILL-FORMED if the hole contains protrusions
+
+PEG WILL FIT if the hole contains no protrusions and the peg fits in the hole at the indicated position
+
+PEG WILL NOT FIT if the hole contains no protrusions but the peg will not fit in the hole at the indicated position
+
+Sample Input 0
+
+5 1.5 1.5 2.0
+1.0 1.0
+2.0 2.0
+1.75 2.0
+1.0 3.0
+0.0 2.0
+5 1.5 1.5 2.0
+1.0 1.0
+2.0 2.0
+1.75 2.5
+1.0 3.0
+0.0 2.0
+1
+Sample Output 0
+
+HOLE IS ILL-FORMED
+PEG WILL NOT FIT
+*******************************************/
+#include <bits/stdc++.h>
+using namespace std;
+double r, x, y;
+int n, f, fff;
+typedef struct point{double x, y;}point;
+double LR(point a, point b, point c){
+    a.x-=c.x;
+    a.y-=c.y;
+    b.x-=c.x;
+    b.y-=c.y;
+    return a.x*b.y-a.y*b.x;
+}
+bool CVX(point *p, int q){
+    double a, b;
+    a=LR(p[0], p[1], p[2]);
+    for(;++p, --q>2;a=b){
+        b=LR(p[0], p[1], p[2]);
+        if(a*b<0) return false;
+    }
+    return true;
+}
+int main() {
+    cin>>n;
+    for(;n>=3;cin>>n, fff=0){
+        if(n<3) break;
+        cin>>r>>x>>y;
+        point *pp=(point*)malloc(sizeof(point)*(n+1));
+        for(int i=0;i<n;++i) cin>>pp[i].x>>pp[i].y;
+        pp[n].x=pp[0].x, pp[n].y=pp[0].y;
+        n++;
+        if(!CVX(pp, n)){
+            cout<<"HOLE IS ILL-FORMED"<<endl;
+            fff=1;
+        }
+        if(!fff){
+            for(int i=0;i<n-1;++i){
+                point p1=pp[i], p2=pp[i+1];
+                double px=(p1.x+p2.x)/2, py=(p1.y+p2.y)/2;
+                if(abs(x-px)*abs(x-px)+abs(y-py)*abs(y-py)<r*r||abs(x-p1.x)*abs(x-p1.x)+abs(y-p1.y)*abs(y-p1.y)<r*r||abs(x-p2.x)*abs(x-p2.x)+abs(y-p2.y)*abs(y-p2.y)<r*r){
+                    fff=1;
+                    cout<<"PEG WILL NOT FIT"<<endl;
+                    break;
+                }
+            }
+        }
+        if(!fff) cout<<"PEG WILL FIT"<<endl;
+    }
+    return 0;
+}
