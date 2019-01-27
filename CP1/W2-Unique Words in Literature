@@ -1,0 +1,65 @@
+/*****************************************************
+Zach is reading his required College of Science general education material, and he wonders that among thousands and thousands of meaningless words he read, which word is unique.
+
+As Zach's lucky number is 2, he wants to figure out the second appeared unique word in the book.
+
+Note: A unique word only appears once in the book.
+
+Input Format
+
+The first line of Input contains an integer N, indicates the number of words in the book, followed by one line with N words separated by spaces.
+
+Note there might be punctuation in the book, and you need to ignore them. For example you should read "I'm" as "Im" and "it." as " it"
+
+Constraints
+N <= 1e6
+
+Output Format
+Output the second unique word or -1 if it doesn't exist.
+
+Sample Input 0
+44
+Nory was a Catholic because her mother was a Catholic, and her mother was a Catholic because her father was a Catholic, and her father was a Catholic because his mother was a Catholic, or had been. -Nicholson Baker, The Everlasting Story of Nory
+
+Sample Output 0
+or
+
+*****************************************************/
+
+#include <bits/stdc++.h>
+#include <unordered_map>
+using namespace std;
+int N, cc;
+string s;
+vector<string> v;
+unordered_map<string, int> MP;
+string C(string ss){
+    string x;
+    int l=ss.length();
+    for(int i=0;i<l;++i) if((ss[i]>=65&&ss[i]<=90)||(ss[i]>=97&&ss[i]<=122)) x+=ss[i];
+    return x;
+}
+int main(){
+    cin>>N;
+    while(N--){
+        cin>>s;
+        s=C(s);
+        if(find(v.begin(), v.end(), s)==v.end()) v.push_back(s);
+        unordered_map<string, int>::iterator itr=MP.find(s);
+        if(itr==MP.end()) MP.insert(pair<string, int>(s, 1));
+        else{
+            int ti=itr->second+1;
+            MP.erase(itr);
+            MP.insert(pair<string, int>(s, ti));
+        }
+    }
+    int ssss=v.size(), cc=0, ix;
+    for(int i=0;i<ssss&&cc<2;++i){
+        if(MP.at(v[i])==1){
+            ++cc;
+            ix=i;
+        }
+    }
+    if(cc==2) cout<<v[ix]<<endl;
+    else cout<<"-1"<<endl;
+}
