@@ -1,0 +1,68 @@
+/******************************************
+Kirito is playing a game called Sword Art Online. He wants to level up faster, so he arrives at a dungeon where all the monsters can be killed in one hit, which is suitable for exp farming. Each type of monster respawns once a while, allowing him to keep killing them and gaining the experience points. Given a list of monster spawning rules, and assume Kirito kills a monster immediately when it spawns, can you predict how Kirito’s kill log looks like?
+
+Input Format
+
+The first part of the input contains only one line, the number of spawning rules N.
+
+The second part of the input is a list of spawning rules, in the following format:
+
+Monster [Monster ID] [Respawn Interval] 
+For example:
+
+Monster 35 15
+Monster 37 40
+Monster 38 2
+The final part of the input contains only one line, the number of kill entries K you should output.
+
+Constraints
+N<=1000
+Monster ID>=1
+Respawn Interval<=3000
+K<=500000
+
+Output Format
+
+You should output in the following format:
+
+Killed [Monster ID]
+
+of the first K kills by Kirito, one kill entry per line. If more than one monster spawns at the same time, Kirito kills them in the ascending order of their IDs.
+
+Sample Input 0
+2
+Monster 61 200
+Monster 203 300
+5
+
+Sample Output 0
+Killed 61
+Killed 203
+Killed 61
+Killed 61
+Killed 203
+******************************************/
+#include <bits/stdc++.h>
+#include <queue>
+using namespace std;
+int x[500001];
+priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+int N, K;
+string s;
+int main() {
+    cin>>N;
+    for(int i=0;i<N;++i){
+        int a, b;
+        cin>>s>>a>>b;
+        x[a]=b;
+        Q.push(make_pair(b, a));        
+    }
+    cin>>K;
+    for(int z=0;z<K;++z){
+        pair<int, int> t=Q.top();
+        Q.pop();
+        cout<<"Killed "<<t.second<<endl;
+        Q.push(make_pair(t.first+x[t.second], t.second));
+    }
+    return 0;
+}
