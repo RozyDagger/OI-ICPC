@@ -1,0 +1,87 @@
+/*********************************************
+WHY GITHUB CANNOT UPLOAD IMAGES, I DONT WANT TO TYPE!
+
+Sample Input 0
+1
+18 800
+cpu i5-8400 66 5
+cpu i5-8600k 103 7
+cpu i7-8700 156 9
+cpu ryzen_5-2600 219 12
+ram 1GB 35 3
+ram 2GB 88 6
+ram 4GB 170 12
+motherboard msi 52 10
+ssd samsung_t5_250GB 54 10
+ssd samsung_t5_500GB 99 12
+casing midi 36 10
+monitor 17_inch 157 5
+monitor 19_inch 175 7
+monitor 20_inch 210 9
+monitor 22_inch 293 12
+mouse logitech_g903 18 12
+mouse razer_deathadder 30 9
+keyboard mechanical 4 10
+Sample Output 0
+
+9
+Explanation 0
+
+The best workstation that can be built within the $800 budget:
+
+cpu i7-8700
+ram 4GB
+motherboard msi
+ssd samsung_t5_250GB
+casing midi
+monitor 20_inch
+mouse logitech_g903
+keyboard mechanical
+*********************************************/
+#include <bits/stdc++.h>
+#include <unordered_map>
+using namespace std;
+#define INF 0x3f3f3f3f
+struct Node{ int p, q; };
+vector<Node> V[1001];
+unordered_map<string, int> ma;
+int T, N, B, cnt;
+int idx(string s){
+    if(!ma.count(s)) ma[s]=cnt++;
+    return ma[s];
+}
+bool ck(int m){
+    int s=0;
+    for(int i=0;i<cnt;++i){
+        int zb=INF, sz=V[i].size();
+        for(int j=0;j<sz;++j) zb=(V[i][j].q>=m&&V[i][j].p<zb)?V[i][j].p:zb;
+        if(zb==INF) return 0;
+        s+=zb;
+        if(s>B) return 0;
+    }
+    return 1;
+}
+int main(){
+    scanf("%d", &T);
+    while(T--){
+        scanf("%d %d", &N, &B);
+        cnt=0;
+        for(int i=0;i<N;V[i++].clear());
+        ma.clear();
+        int mx=0;
+        for(int i=0;i<N;++i){
+            char s1[32], s2[32];
+            int p, q;
+            scanf("%s %s %d %d", s1, s2, &p, &q);
+            mx=q>mx?q:mx;
+            V[idx(s1)].push_back(Node{ p, q });
+        }
+        int l=0, r=mx, m;
+        while(l<r){
+            m=l+((r-l+1)>>1);
+            if(ck(m)) l=m;
+            else r=m-1;
+        }
+        printf("%d\n", l);
+    }
+}
