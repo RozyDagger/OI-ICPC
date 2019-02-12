@@ -1,0 +1,78 @@
+/******************************************
+Our friend Naman loves trees. So much that he loves to make trees out of random integers. He decides to make a game for his friends to solve. He gives them a random list of integers and asks them to make a Binary search tree out of it.
+The tree has the following specifications:
+  The numbers are inserted in the tree in the order of which they are read from the stdin.
+  A number will go to the left child of its parent if the number is smaller than its parent
+  A number will go to the right child of its parent if the number is greater than or equal to its parent.
+Now that you have a BST created, Naman is going to throw a bunch of queries at you. Each of these queries will consist of 2 numbers. These two numbers are guranteed to be numbers from the tree. Now what you need to do is tell Naman the number which would be the lowest common ancestor of the 2 numbers for each query.
+
+Input Format
+
+First line will have a number 'A' representing the number of integers and 'Q' representing the number of queries Naman is going to give you.
+
+Second line will consist of 'A' integer values.
+
+Following Q lines have 2 integers each.
+
+Constraints
+1 <= A <= 100
+1 <= Q <= 50
+
+Output Format
+Output an integer for each query on a new line representing the Lowest common ancestor for the tree.
+
+Sample Input 0
+7 3
+15 16 3 4 1 2 18
+16 15
+1 4
+2 18
+
+Sample Output 0
+15
+3
+15
+******************************************/
+#include <bits/stdc++.h>
+using namespace std;
+struct node{
+    int key; 
+    struct node *left, *right; 
+};
+struct node *newNode(int item){ 
+    struct node *temp=(struct node *)malloc(sizeof(struct node)); 
+    temp->key=item; 
+    temp->left=temp->right=NULL; 
+    return temp; 
+}
+struct node* insert(struct node* node, int key){
+    if(!node) return newNode(key);
+    if(key<node->key) node->left=insert(node->left, key); 
+    else if(key>node->key) node->right=insert(node->right, key);
+    return node; 
+}
+struct node *T=NULL;
+struct node *lca(struct node *rt, int a, int b){
+    if(!rt) return NULL;
+    if(rt->key==a||rt->key==b) return rt;
+    struct node *l=lca(rt->left, a, b), *r=lca(rt->right, a, b);
+    if(l&&r) return rt;
+    return (l?l:r);
+}
+int main() {
+    int A, Q, a, b;
+    cin>>A>>Q;
+    cin>>a;
+    T=insert(T, a);
+    for(int i=1;i<A;++i){
+        cin>>a;
+        insert(T, a);
+    }
+    for(int i=0;i<Q;++i){
+        cin>>a>>b;
+        struct node *t=lca(T, a, b);
+        if(t) cout<<t->key<<endl;
+        else cout<<"zz"<<endl;
+    }
+    return 0;
+}
