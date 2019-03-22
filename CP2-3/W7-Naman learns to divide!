@@ -1,0 +1,41 @@
+/*********************************************
+Naman's friends just taught him division and he wants to show off his dividing skill. His friends give him a list of integers and challenge him to find the longest dividing sequence in the list (i.e. where each integer divides the next completely). Help Naman find the longest dividing sequence.
+
+Input Format
+
+The first line contains N, the number of integers Naman's friends give him.
+The second line has N integers of the type 1 <= Ai <= 1e9, where the ith integer represents the ith integer given to Naman.
+Constraints
+
+1 <= N <= 2000
+1 <= Ai <= 1e9
+Output Format
+
+Output contains a single line, the length of the maximum dividing sequence.
+Sample Input 0
+
+9
+2 3 7 8 14 39 145 76 320
+Sample Output 0
+
+3
+Explanation 0
+
+It has a dividing sequence of length 3, namely {2,8,320} (8 mod 2 = 0 and 320 mod 8 = 0), but none of length 4 or greater.
+*********************************************/
+#include <bits/stdc++.h>
+using namespace std;
+int T;
+int main() {
+    cin>>T;
+    int V[T], dp[T];
+    for(int i=0;i<T;cin>>V[i++]);
+    dp[0]=1;
+    for(int i=1;i<T;++i){
+        dp[i]=1;
+        for(int j=0;j<i;++j)
+            if(dp[j]&&!(V[i]%V[j])) dp[i]=max(dp[i], dp[j]+1);
+    }
+    cout<<(*max_element(dp, dp+T));
+    return 0;
+}
