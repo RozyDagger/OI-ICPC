@@ -1,0 +1,46 @@
+/**********************************
+https://www.hackerrank.com/contests/cp-2-spring-2019-week-9-graph-pt-2/challenges/war-on-graphs
+**********************************/
+#include <bits/stdc++.h>
+using namespace std;
+#define MAXN 10000
+struct node{
+    vector<int> c;
+    int sz;
+    long p1, p2;
+};
+node V[MAXN+1];
+int ind=-1, cnt, T, a, b;
+void run(int i, int p, int n){
+    node *t=V+i;
+    long tp=0, s=n, tp1=-1, tp2=-1;
+    t->sz=1;
+    for(int j=0;j<t->c.size();++j){
+        if(t->c[j]==p) continue;
+        run(t->c[j], i, n);
+        long tt=V[t->c[j]].sz;
+        s-=tt;
+        t->sz+=tt;
+        tp+=tt*(n-tt);
+        if(tt>tp1) tp2=tp1, tp1=tt;
+        else if(tt>tp2) tp2=tt;
+    }
+    tp+=s*(n-s);
+    if(s>tp1) tp2=tp1, tp1=s;
+    else if(s>tp2) tp2=s;
+    t->p1=tp/2;
+    t->p2=tp/2-tp1*tp2;
+    if(ind==-1) ind=i, cnt=1;
+    else if(t->p1>V[ind].p1) ind=i, cnt=1;
+    else if(t->p1==V[ind].p1) ++cnt;
+}
+int main(){
+    cin>>T;
+    for(int i=0;i<T;++i){
+        cin>>a>>b;
+        V[a].c.push_back(b);
+        V[b].c.push_back(a);
+    }
+    run(0, -1, T);
+    cout<<V[ind].p1<<' '<<V[ind].p2<<endl;
+}
