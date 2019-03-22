@@ -1,0 +1,136 @@
+/******************************************
+You and your friends are on a mission that will take you to many places around the world. You have a list of places to stop on the way to your destination, and you must go to these places in order. You can go to them on your way to somewhere else first if you need to, but you must visit them again later when they are next on the list.
+
+Cities are connected with roads, and some are longer than others. Find the shortest paths from stop to stop and plan your trip.
+
+Input Format
+The first line will be the number of city connections c. 
+The following c lines will be the city connections with distances d. 
+Then you will be given the number of stops s to make. The following s lines will be cities you need to stop at, including the destination. You will start in the first city in the list of stops.
+
+Constraints
+10 <= c <= 22500 
+2 <= s <= 150 
+1 <= d <= 10
+
+Output Format
+Print a list of all the cities you will go through on the shortest path through all the stops. If two paths have the same weight, greedily go through cities that are lower alphabetically. For example, Albuquerque < Bloomington.
+
+Sample Input 0
+41
+Nagoya Nanjing 8
+Jakarta Guayaquil 6
+Warsaw Guayaquil 3
+Nairobi Warsaw 10
+Caracas Jakarta 8
+Nairobi Nagoya 1
+Baghdad Moscow 8
+FortWorth Surat 1
+Nagpur Melbourne 4
+Nagoya Moscow 7
+Jakarta Nagoya 1
+Guayaquil SaoPaulo 4
+Guayaquil Sapporo 6
+Nairobi Nagoya 3
+Moscow SaoPaulo 5
+Yokohama Moscow 4
+Moscow Nanjing 7
+Yokohama SaoPaulo 8
+Nagoya Baghdad 10
+Yokohama Guayaquil 8
+Guayaquil Phoenix 1
+Surat Nagpur 3
+Nanjing Baghdad 6
+Nagoya Guayaquil 6
+Phoenix Baghdad 5
+Moscow Surat 7
+Melbourne Surat 5
+Melbourne Yokohama 5
+Melbourne Phoenix 2
+SaoPaulo Nagpur 3
+Jakarta Budapest 8
+Baghdad Nagoya 1
+Nairobi Nagpur 8
+Budapest SaoPaulo 3
+Melbourne Nagoya 2
+Nagoya Nanjing 5
+Sapporo Phoenix 3
+Baghdad Guayaquil 9
+Baghdad Warsaw 7
+Nairobi Budapest 9
+Sapporo Salvador 6
+3
+Salvador
+Nanjing
+Surat
+
+Sample Output 0
+Salvador
+Sapporo
+Phoenix
+Melbourne
+Nagoya
+Nanjing
+Nagoya
+Melbourne
+Surat
+******************************************/
+#include <bits/stdc++.h>
+using namespace std;
+#define INF 0x3f3f3f3f
+int n, t, cnt, d;
+string sa, sb;
+vector<vector<int>> G;
+unordered_map<string, int> mp;
+unordered_map<int, string> smp;
+int ind(string s){
+    if(!mp.count(s)) mp[s]=cnt++;
+    return mp[s];
+}
+int minD(int dist[], bool flag[]){
+    int mn=INF, ind;
+    for(int i=0;i<n;++i)
+        if(!flag[i]&&dist[i]<mn) mn=dist[i], ind=i;
+        else if(!flag[i]&&dist[i]==mn&&smp[i].compare(smp[ind])<0) ind=i;
+    return ind;
+}
+void rpt(int p[], int i){
+    if(p[i]==-1) return;
+    rpt(p, p[i]);
+    cout<<smp[i]<<endl;
+}
+void run(int s, int dst){
+    int dist[n], p[n];
+    bool flag[n]={0};
+    for(int i=0;i<n;p[i]=-1, dist[i]=INF, ++i);
+    dist[s]=0;
+    for(int i=0;i<n-1;++i){
+        int u=minD(dist, flag);
+        flag[u]=1;
+        for(int j=0;j<n;++j)
+            if(!flag[j]&&G[u][j]&&dist[u]+G[u][j]<dist[j]){
+                p[j]=u;
+                dist[j]=dist[u]+G[u][j];
+            }
+    }
+    rpt(p, dst);
+}
+int main() {
+    cin>>n;
+    G.resize(n);
+    for(int i=0;i<n;G[i++].resize(n, 0));
+    for(int i=0;i<n;++i){
+        cin>>sa>>sb>>d;
+        smp[ind(sa)]=sa;
+        smp[ind(sb)]=sb;
+        G[mp[sa]][mp[sb]]=G[mp[sb]][mp[sa]]=d;
+    }
+    cin>>t;
+    int lst[t];
+    for(int i=0;i<t;++i){
+        cin>>sa;
+        lst[i]=mp[sa];
+    }
+    cout<<smp[lst[0]]<<endl;
+    for(int i=1;i<t;++i) run(lst[i-1], lst[i]);
+}
