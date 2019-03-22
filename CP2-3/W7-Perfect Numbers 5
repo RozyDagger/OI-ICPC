@@ -1,0 +1,52 @@
+/************************************************
+Given a positive integer N, find the least number of perfect square numbers (for example, 1, 4, 9, 16, ...) which sum to n.
+
+Input Format
+
+A single interger N
+
+Constraints
+
+1 <= N <= 500000
+
+Output Format
+
+A single integer representing the least number of perfect squares that sum to N.
+
+Sample Input 0
+
+12
+Sample Output 0
+
+3
+Explanation 0
+
+Input: n = 12 Output: 3 Explanation: 12 = 4 + 4 + 4.
+
+Sample Input 1
+
+13
+Sample Output 1
+
+2
+Explanation 1
+
+Input: n = 13 Output: 2 Explanation: 13 = 4 + 9.
+************************************************/
+#include <bits/stdc++.h>
+#define maxn 500001
+using namespace std;
+int run(int n) {
+    for(;!(n%4);n/=4);
+    if(n%8==7) return 4;
+    for(int a=0;a*a<=n;++a){
+        int b=sqrt(n-a*a);
+        if(a*a+b*b==n) return !!a+!!b;
+    }
+    return 3;
+}
+int main(){
+    int n;
+    cin>>n;
+    cout<<run(n);
+}
