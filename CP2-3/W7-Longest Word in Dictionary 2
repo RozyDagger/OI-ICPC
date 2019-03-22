@@ -1,0 +1,54 @@
+/*************************************
+Given a list of strings WORDS representing an English Dictionary, find the longest word in words that can be built one character at a time by other words in WORDS. If there is more than one possible answer, return the longest word that would come first in lexicographical order.
+
+If there is no answer, return the empty string.
+
+Input Format
+
+One line with words separated by a space
+
+Constraints
+
+All the strings in the input will only contain lowercase letters.
+The length of words will be in the range [1, 1000].
+The length of words[i] will be in the range [1, 30].
+Output Format
+
+A single longest word that can be formed.
+
+Sample Input 0
+
+w wo wor worl world
+Sample Output 0
+
+world
+Explanation 0
+
+The word "world" can be built one character at a time by "w", "wo", "wor", and "worl".
+
+Sample Input 1
+
+a banana app appl ap apply apple
+Sample Output 1
+
+apple
+Explanation 1
+
+Both "apply" and "apple" can be built from other words in the dictionary. However, "apple" is lexicographically smaller than "apply".
+*************************************/
+#include <bits/stdc++.h>
+#include <unordered_set>
+using namespace std;
+int main() {
+    string rst="", t;
+    vector<string> V;
+    unordered_set<string> us;
+    while(cin>>t) V.push_back(t);
+    sort(V.begin(), V.end());
+    for(string wd:V)
+        if(wd.length()==1||us.count(wd.substr(0, wd.length()-1))){
+            rst=wd.length()>rst.length()?wd:rst;
+            us.insert(wd);
+        }
+    cout<<rst;
+}
