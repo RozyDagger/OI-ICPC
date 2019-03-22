@@ -1,0 +1,57 @@
+/**************************************
+https://www.hackerrank.com/contests/cp-2-spring-2019-mid-semester-contest/challenges/naman-and-brackets
+**************************************/
+#include <bits/stdc++.h>
+using namespace std;
+typedef struct Node{int a, b, c; Node(){a=b=c=0;}}Node;
+Node mg(Node l, Node r){
+    Node t;
+    int mn=min(l.b, r.c);
+    t.a=l.a+r.a+mn;
+    t.b=l.b+r.b-mn;
+    t.c=l.c+r.c-mn;
+    return t;
+}
+void IR(char *str, int s, int e, Node *v, int i){
+    if(s==e){
+        v[i].a=0;
+        v[i].b=str[s]=='('?1:0;
+        v[i].c=str[s]==')'?1:0;
+        return;
+    }
+    int m=s+(e-s)/2;
+    IR(str, s, m, v, i*2+1);
+    IR(str, m+1, e, v, i*2+2);
+    v[i]=mg(v[i*2+1], v[i*2+2]);
+}
+Node *init(char *str, int n){
+    Node *v=new Node[(int)(2*pow(2, ceil(log2(n)))-1)];
+    IR(str, 0, n-1, v, 0);
+    return v;
+}
+Node QR(int s, int e, int qs, int qe, Node *v, int i){
+    if(s>qe||e<qs){
+        Node t;
+        return t;
+    }
+    if(s>=qs&&e<=qe) return v[i];
+    int m=s+(e-s)/2;
+    Node l=QR(s, m, qs, qe, v, i*2+1), r=QR(m+1, e, qs, qe, v, 2*i+2), rst=mg(l, r);
+    return rst;
+}
+int Q(int qs, int qe, Node *v, int n){
+    Node rst=QR(0, n-1, qs, qe, v, 0);
+    return 2*rst.a;
+}
+int main(){
+    string s;
+    int T, n, a, b;
+    cin>>s>>T;
+    n=s.length();
+    char *str=strdup(s.c_str());
+    Node *v=init(str, n);
+    while(T--){
+        cin>>a>>b;
+        cout<<Q(a-1, b-1, v, n)<<endl;
+    }
+}
