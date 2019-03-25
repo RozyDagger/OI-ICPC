@@ -1,0 +1,24 @@
+/***************************************
+
+https://www.hackerrank.com/contests/cp-2-spring-2019-week-10-geometry/challenges/cant-come-up-with-a-name/copy-from/1313544410
+
+***************************************/
+#include <bits/stdc++.h>
+using namespace std;
+vector<pair<double, double>> V;
+int n;
+double a, b, c, d, e, f;
+int main(){
+    cin>>n>>a>>b>>c;
+    V.resize(n);
+    for(int i=0;i<n;cin>>V[i].first>>V[i++].second);
+    for(int i=0;i<n;++i){
+        if(V[i].second*b-V[i].first*c>0) ++d;
+        if(V[i].second*b-V[i].first*c<0) ++e;
+    }
+    if(!d||!e) printf("%.4lf", a/c);
+    else{
+        for(int i=0;i<n;++i) if(V[i].first>0) f=max(f, max(V[i].first/b, V[i].second/c)+(a-V[i].second)/c);
+        printf("%.4lf", f);
+    }
+}
