@@ -1,0 +1,16 @@
+#define left(a) (2*a+1)
+#define right(a) (2*a+2)
+class Solution {
+public:
+    vector<int> rst;
+    void recur(TreeNode *i){
+        if(!i) return;
+        recur(i->left);
+        recur(i->right);
+        rst.push_back(i->val);
+    }
+    vector<int> postorderTraversal(TreeNode* root) {
+        recur(root);
+        return rst;
+    }
+};
