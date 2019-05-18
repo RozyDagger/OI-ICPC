@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void recoverTree(TreeNode* rt) {
+        TreeNode *a=NULL, *b=NULL, *p=NULL, *cur, *pre;
+        for(cur=rt;cur;)
+            if(!cur->left){
+                if(p&&p->val>cur->val){
+                    if(!a) a=p;
+                    b=cur;
+                }
+                p=cur;
+                cur=cur->right;
+            }else{
+                for(pre=cur->left;pre->right&&pre->right!=cur;pre=pre->right);
+                if(!pre->right){
+                    pre->right=cur;
+                    cur=cur->left;
+                }else{
+                    pre->right=NULL;
+                    if(p->val>cur->val) {
+                        if(!a) a=p;
+                        b=cur;
+                    }
+                    p=cur;
+                    cur=cur->right;
+                }
+            }
+        swap(a->val, b->val);
+    }
+};
