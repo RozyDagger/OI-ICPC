@@ -1,0 +1,26 @@
+class RandomizedCollection {
+public:
+    RandomizedCollection() { }
+    bool insert(int val) {
+        mp[val].insert(V.size());
+        V.push_back(val);
+        return mp[val].size()==1;
+    }
+    bool remove(int val) {
+        if(!mp[val].size()) return 0;
+        int ind=*mp[val].begin();
+        mp[val].erase(ind);
+        if(ind!=V.size()-1){
+            mp[V.back()].erase(V.size()-1);
+            mp[V.back()].insert(ind);
+            swap(V.back(), V[ind]);
+        }
+        V.pop_back();
+        return 1;
+    }
+    int getRandom() {
+        return V[rand()%V.size()];
+    }
+    vector<int> V;
+    unordered_map<int, unordered_set<int>> mp;
+};
