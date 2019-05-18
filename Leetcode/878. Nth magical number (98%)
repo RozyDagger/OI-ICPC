@@ -1,0 +1,14 @@
+#define m 1000000007
+class Solution {
+public:
+    int nthMagicalNumber(int n, int a, int b) {
+        long l=2, r=(long) 1e9*4e5;
+        int d=__gcd(a, b);
+        while(l<r){
+            long md=(r-l)/2+l;
+            if(md/a+md/b-md/(a*b/d)<n) l=md+1;
+            else r=md;
+        }
+        return l%m;
+    }
+};
