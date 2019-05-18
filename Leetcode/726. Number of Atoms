@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string countOfAtoms(string s) {
+        string rst="";;
+        stack<map<string, int>> st;
+        map<string, int> mp;
+        int n=s.size(), pos=0;
+        while(pos<n)
+            if(s[pos]=='('){
+                ++pos;
+                st.push(move(mp));
+            }else if(s[pos]==')'){
+                int i=++pos;
+                for(;pos<n&&isdigit(s[pos]);++pos);
+                int m=stoi(s.substr(i, pos-i));
+                for(auto itr:mp) st.top()[itr.first]+=itr.second*m;
+                mp=move(st.top()); st.pop();
+            }else{
+                int i=pos++;
+                for(;pos<n&&islower(s[pos]);++pos);
+                string ele=s.substr(i, pos-i);
+                for(i=pos;pos<n&&isdigit(s[pos]);++pos);
+                string c=s.substr(i, pos-i);
+                mp[ele]+=c.empty()?1:stoi(c);
+            }
+        for(auto itr:mp) rst+=itr.first+(itr.second==1?"":to_string(itr.second));
+        return rst;
+    }
+};
