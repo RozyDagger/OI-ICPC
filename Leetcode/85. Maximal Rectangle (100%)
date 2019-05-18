@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char> > &G) {
+        if(G.empty()) return 0;
+        int rst=0;
+        vector<int> v(G[0].size(), 0);
+        for(int i=0;i<G.size();++i){
+            for(int j=0;j<G[0].size();v[j++]=G[i][j]-'0'?++v[j]:0);
+            rst=max(rst, run(v));
+        }
+        return rst;
+    }
+    int run(vector<int> &v) {
+        stack<int> s;
+        v.push_back(0);
+        int maxa=0;
+        for(int i = 0;i<v.size();++i){
+            if(s.empty()||v[i]>=v[s.top()]) s.push(i);
+            else{
+                int tmp=v[s.top()]; s.pop();
+                maxa=max(maxa, tmp*(s.empty()?i:i-1-s.top()));
+                --i;
+            }
+        }
+        return maxa;
+    }
+};
