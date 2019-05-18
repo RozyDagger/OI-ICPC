@@ -1,0 +1,10 @@
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& V) {
+        int n=V.size();
+        if(!n) return 1;
+        for(int i=0;i<n;++i) for(;V[i]>0&&V[i]<=n&&V[i]!=V[V[i]-1];swap(V[i], V[V[i]-1]));
+        for(int i=0;i<n;++i) if(V[i]!=i+1) return i+1;
+        return n+1;
+    }
+};
