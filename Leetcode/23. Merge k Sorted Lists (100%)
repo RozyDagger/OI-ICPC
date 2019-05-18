@@ -1,0 +1,38 @@
+#define NEW (ListNode*)malloc(sizeof(ListNode))
+class Solution {
+private:
+    ListNode *m(ListNode *l1, ListNode *l2){
+        if(!l1) return l2;
+        if(!l2) return l1;
+        ListNode *t1=l1, *t2=l2, *rst, *t;
+        if(t1->val<t2->val){
+            rst=t1;
+            t1=t1->next;
+        }else{
+            rst=t2;
+            t2=t2->next;
+        }
+        t=rst;
+        while(t1&&t2){
+            if(t1->val<t2->val){
+                t->next=t1;
+                t1=t1->next;
+            }else{
+                t->next=t2;
+                t2=t2->next;
+            }
+            t=t->next;
+        }
+        t->next=t1?t1:t2;
+        return rst;
+    }
+    ListNode *run(vector<ListNode*>& lst, int l, int r){
+        if(l==r) return lst[l];
+        if(l<r) return m(run(lst, l, (l+r)/2), run(lst, (l+r)/2+1, r));
+        return NULL;
+    }
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        return run(lists, 0, lists.size()-1);
+    }
+};
