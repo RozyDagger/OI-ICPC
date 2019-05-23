@@ -1,0 +1,26 @@
+#define MAX(a, b) (a>b?a:b)
+#define MIN(a, b) (a<b?a:b)
+#define INF 0x3f3f3f3f
+class Solution {
+public:
+    int maximumGap(vector<int>& v) {
+        if(!v.size()) return 0;
+        int mx=-INF, mn=INF, n=v.size();
+        for(int a:v) mx=MAX(mx, a), mn=MIN(mn, a);
+        int sz=(mx-mn)/n+1, bkt=(mx-mn)/sz+1, rst=0;
+        vector<int> bmn(bkt, INF), bmx(bkt, -INF);
+        unordered_set<int> s;
+        for(int a:v){
+            int ind=(a-mn)/sz;
+            bmn[ind]=MIN(bmn[ind], a);
+            bmx[ind]=MAX(bmx[ind], a);
+            s.insert(ind);
+        }
+        for(int t=0, i=1;i<n;++i){
+            if(s.find(i)==s.end()) continue;
+            rst=MAX(rst, bmn[i]-bmx[t]);
+            t=i;
+        }
+        return rst;
+    }
+};
