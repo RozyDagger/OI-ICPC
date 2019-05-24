@@ -1,0 +1,41 @@
+/*******************************
+https://www.hackerrank.com/contests/cp-2-spring-2019-final-contest/challenges/naman-loves-soda/copy-from/1313646589
+*******************************/
+#include <bits/stdc++.h>
+using namespace std;
+#define MAXN 105
+#define MAX(a, b) (a>b?a:b)
+typedef struct Node{int l, v;}Node;
+Node V[MAXN];
+int n, cnt, tt, dp[MAXN][MAXN*100], s, rst;
+bool CMP(Node a, Node b){
+    if(a.v-b.v) return a.v>b.v;
+    else return a.l>b.l;
+}
+int main(){
+    cin>>n;
+    memset(dp, -1, sizeof(dp));
+    for(int i=1;i<=n;++i){
+        cin>>V[i].l;
+        s+=V[i].l;
+    }
+    for(int i=1;i<=n;cin>>V[i++].v);
+    sort(V+1, V+1+n, CMP);
+    for(int i=1;i<=n;++i){
+        tt+=V[i].v;
+        if(tt>=s){
+            cnt=i;
+            break;
+        }
+    }
+    dp[0][0]=0;
+    for(int i=1;i<=n;++i)
+        for(int j=s;j-V[i].l>=0;--j)
+            for(int k=i;k>=1;--k) if(dp[k-1][j-V[i].l]!=-1) dp[k][j]=MAX(dp[k][j], dp[k-1][j-V[i].l]+V[i].v);
+    for(int i=s;i>=1;--i)
+        if(dp[cnt][i]>=s){
+            rst=s-i;
+            break;
+        }
+    cout<<cnt<<" "<<rst;
+}
