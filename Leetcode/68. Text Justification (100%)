@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string> &words, int L) {
+        vector<string> rst;
+        int i=0;
+        for(int i=0, j, len;i<words.size();i=j){
+            j=i, len=0;
+            for(;j<words.size()&&len+words[j].size()+j-i<=L;len+=words[j++].size());
+            string tr;
+            int sp=L-len;
+            for(int k=i;k<j;++k) {
+                tr+=words[k];
+                if(sp>0){
+                    int tmp=j==words.size()?(j-k)==1?sp:1:j-k-1>0?sp/(j-k-1)+(!(sp%(j-k-1))?0:1):sp;
+                    tr.append(tmp, ' ');
+                    sp-=tmp;
+                }
+            }
+            rst.push_back(tr);
+        }
+        return rst;
+    }
+};
