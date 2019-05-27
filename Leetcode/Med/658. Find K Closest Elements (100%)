@@ -4,7 +4,7 @@ public:
         int l=0, r=V.size()-k;
         while(l<r){
             int m=(l+r)/2;
-            if(abs(V[m]-x)>abs(V[m+k]-x)) l=m+1;
+            if(V[m]-x>V[m+k]-x) l=m+1;
             else r=m;
         }
         return vector<int>(V.begin()+l, V.begin()+l+k);
