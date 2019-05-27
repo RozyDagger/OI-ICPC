@@ -1,0 +1,18 @@
+class Solution {
+public:
+    void recur(vector<int> &V, vector<vector<int>> &rst, vector<int> t, int x=0){
+        rst.push_back(t);
+        if(x>=V.size()) return;
+        for(int i=x;i<V.size();++i){
+            t.push_back(V[i]);
+            recur(V, rst, t, i+1);
+            t.pop_back();
+        }
+    }
+    vector<vector<int>> subsets(vector<int>& V) {
+        vector<vector<int>> rst;
+        vector<int> t;
+        recur(V, rst, t);
+        return rst;
+    }
+};
