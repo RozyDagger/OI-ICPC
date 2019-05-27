@@ -1,0 +1,16 @@
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* h) {
+        if(!h) return NULL;
+        return recur(h, NULL);
+    }
+    TreeNode* recur(ListNode* h, ListNode* t) {
+        if(h==t) return NULL;
+        ListNode *l=h, *r=h;
+        for(;r!=t&&r->next!=t;l=l->next, r=r->next->next);
+        TreeNode *cur=new TreeNode(l->val);
+        cur->left=recur(h, l);
+        cur->right=recur(l->next, t);
+        return cur;
+    }
+};
