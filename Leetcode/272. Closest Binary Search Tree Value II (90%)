@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> V;
+    vector<int> closestKValues(TreeNode * rt, double t, int k) {
+        recur(rt);
+        int ind=0, l, r;
+        for(l=0, r=V.size()-k;l<r;){
+            int m=(l+r)/2;
+            if(t-V[m]>V[m+k]-t) l=m+1;
+            else r=m;
+        }
+        return vector<int>(V.begin()+l, V.begin()+l+k);
+    }
+    void recur(TreeNode *rt){
+        if(!rt) return;
+        recur(rt->left);
+        V.push_back(rt->val);
+        recur(rt->right);
+    }
+};
