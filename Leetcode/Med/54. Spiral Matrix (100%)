@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& G) {
+        if(!G.size()||!G[0].size()) return {};
+        vector<int> rst(G.size()*G[0].size());
+        for(int k=0, l=0, m=G.size(), n=G[0].size(), c=0;k<m&&l<n;){
+            for(int i=l;i<n;rst[c++]=G[k][i++]);
+            ++k;
+            for(int i=k;i<m;rst[c++]=G[i++][n-1]);
+            --n;
+            if(k<m){
+                for(int i=n-1;i>=l;rst[c++]=G[m-1][i--]);
+                --m;
+            }
+            if(l<n){
+                for(int i=m-1;i>=k;rst[c++]=G[i--][l]);
+                ++l;
+            }
+        }
+        return rst;
+    }
+};
