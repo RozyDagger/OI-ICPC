@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int> &v) {
+        if(v.empty()) return {{}};
+        int n=v.size(), bs=1, l=v[0];
+        vector<vector<int> > rst(1);
+        sort(v.begin(), v.end());
+        for(int i=0;i<n;++i){
+            if(l!=v[i]){
+                l=v[i];
+                bs=rst.size();
+            }
+            int ts=rst.size();
+            for(int j=ts-bs;j<ts;++j){
+                rst.push_back(rst[j]);
+                rst.back().push_back(v[i]);
+            }
+        }
+        return rst;
+    }
+};
