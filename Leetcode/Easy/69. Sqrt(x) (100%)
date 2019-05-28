@@ -1,0 +1,14 @@
+// To solve x^2=n, let f(x)=x^2-n
+// x[i+1]=x[i]-(x[i]^2-n)/(2x[i])=(x[i]+n/x[i])/2
+class Solution {
+public:
+    int mySqrt(int n) {
+        if(!n) return 0;
+        double c=1, p=0;
+        while(abs(c-p)>1e-6){
+            p=c;
+            c=(c+n/c)/2;
+        }
+        return int(c);
+    }
+};
