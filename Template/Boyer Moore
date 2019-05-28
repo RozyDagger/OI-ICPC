@@ -1,0 +1,20 @@
+#define MAX(a, b) ((a)>(b)?(a):(b))
+class Solution {
+public:
+    //a: string; b: pattern
+    int strStr(string a, string b) {
+        int la=a.size(), lb=b.size(), skip=0;
+        vector<int> jp(128, -1);
+        for(int i=0;i<lb;++i) jp[b[i]]=i;
+        for(int i=0;i<la-lb+1;i+=skip){
+            skip=0;
+            for(int j=lb-1;j>=0;--j)
+                if(a[i+j]!=b[j]){
+                    skip=MAX(1, j-jp[a[i+j]]);
+                    break;
+                }
+            if(!skip) return i;
+        }
+        return -1;
+    }
+};
