@@ -1,4 +1,4 @@
-/***************************************
+'''
 Mr.Nerd has been travelling since last time he failed to unplug all the trees that Purdue Pete planted in front of WALC. As soon as Mr.Nerd heard the registration for 2019 Spring is opening, he came back in a hurry by bike from Las Vegas (Yes, I double checked with him. He said he came back from Las Vegas by bike). At this time, Mr. Nerd stays at WALC and doesn't let students use ITAP computers to register classes unless they can solve a problem from him. With a number N which may have up to 150 (since this year is "150 YEARS OF GIANTLEAPS") digits given by Mr. Nerd, you need to figure out the last 4 digits of 2019^N in order to get the access to ITAP computers and finish your 2019 registration.
 
 Input Format
@@ -35,7 +35,7 @@ Sample Output 0
 Explanation 0
 
 Hint: find minimum b (b>0) as in a^b%c==1 ---- it is the key to the new world :)
-***************************************/
+'''
 T=input()
 for i in range(int(T)):
     N=input()
