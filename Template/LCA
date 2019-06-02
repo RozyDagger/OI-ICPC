@@ -1,0 +1,18 @@
+//Linked list:
+struct node *lca(struct node *rt, int a, int b){
+    if(!rt) return NULL;
+    if(rt->key==a||rt->key==b) return rt;
+    struct node *l=lca(rt->left, a, b), *r=lca(rt->right, a, b);
+    if(l&&r) return rt;
+    return (l?l:r);
+}
+
+
+//Array:
+#define left(x) (2*x+1)
+#define right(x) (2*x+2)
+int lca(int r, int a, int b){
+    if(T[r]>a&&T[r]>b) return lca(left(r), a, b);
+    if(T[r]<a&&T[r]<b) return lca(right(r), a, b);
+    return r;
+}
