@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int candy(vector<int>& v) {
+        if(v.empty()) return 0;
+        int rst=1, pre=1, c=0;
+        for(int i=1;i<v.size();++i)
+            if(v[i]>=v[i-1]){
+                if(c>0){
+                    rst+=c*(c+1)/2;
+                    if(c>=pre) rst+=c-pre+1;
+                    c=0, pre=1;
+                }
+                pre=(v[i]==v[i-1])?1:pre+1;
+                rst+=pre;
+            }else ++c;
+        if(c>0) rst+=c*(c+1)/2+(c>=pre?c-pre+1:0);
+        return rst;
+    }
+};
