@@ -1,0 +1,35 @@
+#define vi vector<int>
+struct Node{ int data; Node *l, *r; };
+Node *recur(int rt, vi arr, vi p, vi lc, vi rc){
+    if(rt==-1) return NULL;
+    Node *t=new Node;
+    t->data=arr[rt];
+    t->l=recur(lc[rt], arr, p, lc, rc);
+    t->r=recur(rc[rt], arr, p, lc, rc);
+    return t;
+}
+Node *build(vi arr){
+    int n=arr.size(), rt=0, t;
+    vi p(n, -1), lc(n, -1), rc(n, -1);
+    for(int i=1;i<n;++i){
+        t=i-1;
+        rc[i]=-1;
+        for(;arr[t]<=arr[i]&&t!=rt;t=p[t]);
+        if(arr[t]<=arr[i]){
+            p[rt]=i;
+            lc[i]=rt;
+            rt=i;
+        }else if(rc[t]==-1){
+            p[i]=t;
+            lc[i]=-1;
+            rc[t]=i;
+        }else{
+            p[rc[t]]=i;
+            lc[i]=rc[t];
+            rc[t]=i;
+            p[i]=t;
+        }
+    }
+    p[rt]=-1;
+    return recur(rt, arr, p, lc, rc);
+}
