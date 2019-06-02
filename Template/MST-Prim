@@ -1,0 +1,18 @@
+int minKey(int *key, bool *flag){
+  int mn=INT_MAX, rst;
+  for(int i=0;i<V;++i) if(!flag[i]&&key[i]<mn) mn=key[i], rst=i;
+  return mn;
+}
+int print(int *p, int n, int **G) for(int i=1;i<V;++i) printf(“A: %d, B: %d, Weight: %d\n”, p[i], i, G[i][p[i]]); } 
+void primMST(int *G){
+	int p[V], key[V];
+	bool flag[V]={0};
+	for(int i=0;i<V;key[i++]=INT_MAX);
+	key[0]=0, p[0]=-1;
+	for (int i=0;i<V-1;++i){
+		int t=minKey(key, flag);
+		flag[t]=1;
+		for(int j=0;j<V;++j) if(G[t][j]&&!flag[j]&&G[t][j]<key[j]) p[j]=t, key[j]=G[t][j];
+	}
+	print(p, V, G);
+}
