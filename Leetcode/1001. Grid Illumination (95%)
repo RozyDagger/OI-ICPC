@@ -1,0 +1,26 @@
+class Solution {
+public:
+	unordered_map<int, int> mx, my, md1, md2;
+    unordered_set<unsigned long> st;
+	vector<int> gridIllumination(int N, vector<vector<int>>& G, vector<vector<int>>& Q) {
+        for(vector<int> v:G){
+            ++mx[v[0]], ++my[v[1]], ++md1[v[0]+v[1]], ++md2[v[0]-v[1]];
+            st.insert(((unsigned long)v[0]<<32)|v[1]);
+        }
+        vector<int> rst;
+        for(vector<int> q:Q) rst.push_back(check(q[0], q[1]));
+        return rst;
+	}
+    int check(int x, int y){
+        bool flag=mx[x]||my[y]||md1[x+y]||md2[x-y];
+        for(int i=-1;i<2;++i)
+            for(int j=-1;j<2;++j){
+                unsigned long id=((unsigned long)(x+i)<<32)|(y+j);
+                if(st.find(id)!=st.end()){
+                    --mx[x+i], --my[y+j], --md1[x+i+y+j], --md2[x+i-y-j];
+                    st.erase(id);
+                }
+            }
+        return flag;
+    }
+};
