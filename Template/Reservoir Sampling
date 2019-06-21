@@ -3,6 +3,7 @@ using namespace std;
 #define K 100
 vector<int> V;
 vector<int> run(vector<int> &V, int k){
+    srand(time(NULL));
     vector<int> rst(V.begin(), V.begin()+k);
     for(int i=k;i<V.size();++i){
         int ind=rand()%(i+1);   //probability for 1 selection is k/j
@@ -13,5 +14,5 @@ vector<int> run(vector<int> &V, int k){
 int main(){
     for(int i=0;i<200;V.push_back(i++));
     vector<int> rst=run(V, K);
-    for(int i=0;i<K;cout<<rst[i++]<<endl);
+    for(int i=0;i<K;cout<<i<<": "<<rst[i++]<<endl);
 }
