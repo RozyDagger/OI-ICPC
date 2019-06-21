@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define K 100
+vector<int> V;
+vector<int> run(vector<int> &V, int k){
+    vector<int> rst(V.begin(), V.begin()+k);
+    for(int i=k;i<V.size();++i){
+        int ind=rand()%(i+1);   //probability for 1 selection is k/j
+        if(ind<k) rst[ind]=V[i];
+    }
+    return rst;
+}
+int main(){
+    for(int i=0;i<200;V.push_back(i++));
+    vector<int> rst=run(V, K);
+    for(int i=0;i<K;cout<<rst[i++]<<endl);
+}
