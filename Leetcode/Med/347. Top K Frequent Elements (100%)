@@ -1,0 +1,29 @@
+struct Node{
+    int k, v;
+    Node(int a, int b):k(a), v(b){}
+};
+struct cmp{
+    bool operator()(Node a, Node b){
+        return a.k<b.k;
+    }
+};
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& V, int k) {
+        vector<int> v, rst;
+        unordered_map<int, int> mp;
+        for(int i:V)
+            if(mp.find(i)==mp.end()){
+                mp[i]=1;
+                v.push_back(i);
+            }else ++mp[i];
+        priority_queue<Node, vector<Node>, cmp> q;
+        for(int i:v) q.push(Node(mp[i], i));
+        for(int i=0;i<k;++i){
+            int t=q.top().v;
+            q.pop();
+            rst.push_back(t);
+        }
+        return rst;
+    }
+};
