@@ -1,0 +1,38 @@
+#define PII pair<int, int>
+#define MIN(a, b) ((a)<(b)?(a):(b))
+#define MAX(a, b) ((a)>(b)?(a):(b))
+class RangeModule {
+    struct cmp{
+        bool operator()(const PII &a, const PII&b)const{
+            return a.second<=b.first;
+        }
+    };
+    set<PII, cmp> st;
+public:
+    RangeModule() {}    
+    void addRange(int l, int r) {
+        auto itr=st.equal_range({l, r});
+        if(itr.first!=itr.second){
+            int tl=MIN(itr.first->first, l), tr=MAX(prev(itr.second)->second, r);
+            st.erase(itr.first, itr.second);
+            st.emplace(tl, tr);
+        }else st.emplace(l, r);
+    }    
+    bool queryRange(int l, int r) {
+        auto itr=st.equal_range({l, r});
+        if(itr.first==itr.second||prev(itr.second)->second<r) return 0;
+        for(auto t=itr.first;t!=itr.second;++t)
+            if(l<t->first) return 0;
+            else l=t->second;
+        return 1;
+    }    
+    void removeRange(int l, int r) {
+        auto itr=st.equal_range({l, r});
+        if(itr.first!=itr.second){
+            int tl=itr.first->first, tr=prev(itr.second)->second;
+            st.erase(itr.first, itr.second);
+            if(tl<l) st.emplace(tl, l);
+            if(r<tr) st.emplace(r, tr);
+        }
+    }
+};
