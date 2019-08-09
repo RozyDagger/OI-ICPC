@@ -1,0 +1,15 @@
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& V, vector<int>& v) {
+        vector<vector<int>> rst;
+        int n=V.size(), cur=0;
+        for(;cur<n&&V[cur][1]<v[0];rst.push_back(V[cur++]));
+        for(;cur<n&&V[cur][0]<=v[1];++cur){
+            v[0]=min(v[0], V[cur][0]);
+            v[1]=max(v[1], V[cur][1]);
+        }
+        rst.push_back(v);
+        for(;cur<n;rst.push_back(V[cur++]));
+        return rst;
+    }
+};
