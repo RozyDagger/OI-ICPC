@@ -1,0 +1,12 @@
+class Solution {
+public:
+    bool isSelfCrossing(vector<int>& V) {
+        V.insert(V.begin(), 4, 0);
+        int n=V.size(), i=4;
+        for(;i<n&&V[i]>V[i-2];++i);
+        if(i==n) return 0;
+        if(V[i]>=V[i-2]-V[i-4]) V[i-1]-=V[i-3];
+        for(++i;i<n&&V[i]<V[i-2];++i);
+        return i!=n;
+    }
+};
