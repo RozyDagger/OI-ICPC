@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+using namespace std;
+int T;
+string s, mx, clr;
+int main() {
+    cin>>T;
+    while(T--){
+        string a, b, c;
+        cin>>s;
+        a.resize(2), b.resize(2), c.resize(2);
+        a[0]=s[0], a[1]=s[1], b[0]=s[2], b[1]=s[3], c[0]=s[4], c[1]=s[5];
+        if(a.compare(b)>0) mx=a, clr="Red";
+        else mx=b, clr="Green";
+        if(mx.compare(c)<0) clr="Blue";
+        cout<<clr<<endl;
+    }
+    return 0;
+}
