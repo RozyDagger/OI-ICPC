@@ -1,0 +1,16 @@
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        int mp[128]={0}, vp[128]={0};
+        string rst;
+        for(int i=0;i<s.size();++mp[s[i++]]);
+        for(int i=0;i<s.size();++i){
+            --mp[s[i]];
+            if(vp[s[i]]) continue;
+            for(;s[i]<rst[rst.size()-1]&&mp[rst[rst.size()-1]];rst.pop_back()) vp[rst[rst.size()-1]]=0;
+            rst+=s[i];
+            vp[s[i]]=1;
+        }
+        return rst;
+    }
+};
