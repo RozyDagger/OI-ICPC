@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+int dr[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
+struct node{
+    int x, y, d;
+    node(int a, int b, int c):x(a), y(b), d(c){}
+};
+int run(vector<vector<char>> G){
+    queue<node> q;
+    int n=G.size(), m=G[0].size();
+    for(int i=0;i<n;++i) for(int j=0;j<m;++j) if(G[i][j]=='x') q.push(node(i, j, 0));
+    while(!q.empty()){
+        queue<node> nxt;
+        while(!q.empty()){
+            node tn=q.front(); q.pop();
+            if(G[tn.x][tn.y]=='y') return tn.d;
+            G[tn.x][tn.y]='z';
+            for(int j=0;j<4;++j){
+                int tx=tn.x+dr[j][0], ty=tn.y+dr[j][1];
+                if(tx<0||tx>=n||ty<0||ty>=m||G[tx][ty]=='z') continue;
+                nxt.push(node(tx, ty, tn.d+1));
+            }
+        }
+        q=nxt;
+    }
+    return -1;
+}
+int main(){
+    vector<vector<char>> G;
+    G.push_back({'x','x','0','0','0'});
+    G.push_back({'x','x','0','0','0'});
+    G.push_back({'0','0','0','y','y'});
+    cout<<run(G);
+}
