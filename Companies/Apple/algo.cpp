@@ -164,7 +164,7 @@ int compareVersion(string a, string b) {
     ia=ib=0;
   }
   return 0;
-}
+} 
 
 #define vi vector<int>
 struct Node{ int data; Node *l, *r; };
