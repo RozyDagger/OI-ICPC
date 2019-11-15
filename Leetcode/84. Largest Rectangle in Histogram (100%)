@@ -9,7 +9,7 @@ public:
             else{
                 int tv=V[s.top()];
                 s.pop();
-                int ti=s.empty()?i:i-1-s.top();
+                int ti=s.empty()?i--:--i-s.top();
                 rst=rst<ti*tv?ti*tv:rst;
                 --i;
             }
