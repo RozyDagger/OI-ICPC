@@ -1,0 +1,47 @@
+//https://www.hackerrank.com/contests/cp1-fall-2019-contest-3/challenges/rooms-and-doors/copy-from/1317431375
+#include <bits/stdc++.h>
+using namespace std;
+#define ULL unsigned long long
+#define MIN(a, b) ((a)<(b)?(a):(b))
+int dr[4][2]={{1,0},{-1,0},{0,1},{0,-1}}, R, C, Q, xa, ya, xb, yb, rst, cnt;
+vector<string> G;
+vector<vector<int>> V;
+vector<vector<ULL>> mp;
+string s;
+void mark(int x, int y){
+    G[x][y]='@', V[x][y]=cnt;
+    for(int i=0;i<4;++i){
+        int tx=x+dr[i][0], ty=y+dr[i][1];
+        if(tx>=0&&tx<R&&ty>=0&&ty<C&&G[tx][ty]=='.') mark(tx, ty);
+    }
+}
+void conn(int x, int y){
+    for(int i=0;i<4;i+=2){
+        int tx1=x+dr[i][0], ty1=y+dr[i][1], tx2=x+dr[i+1][0], ty2=y+dr[i+1][1];
+        if(tx1>=R||ty1>=C||tx2<0||ty2<0||V[tx1][ty1]==-1||V[tx2][ty2]==-1) continue;
+        ++mp[V[tx1][ty1]][V[tx2][ty2]];
+        ++mp[V[tx2][ty2]][V[tx1][ty1]];
+    }
+}
+int main(){
+    cin>>R>>C>>Q;
+    V.resize(R, vector<int>(C, -1));
+    for(int i=0;i<R;++i){
+        cin>>s;
+        G.push_back(s);
+    }
+    for(int i=0;i<R;++i) 
+        for(int j=0;j<C;++j) 
+            if(G[i][j]=='.'){
+                mark(i, j);
+                ++cnt;
+            }
+    mp.resize(cnt, vector<ULL>(cnt, 0));
+    for(int i=0;i<R;++i) for(int j=0;j<C;++j) if(G[i][j]=='D') conn(i, j);
+    for(int i=0;i<Q;++i){
+        cin>>xa>>ya>>xb>>yb;
+        int t1=V[xa][ya], t2=V[xb][yb];
+        if(t1==t2) cout<<-1<<" ";
+        else cout<<mp[t1][t2]<<" ";
+    }
+}
