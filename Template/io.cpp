@@ -1,14 +1,10 @@
 #include <cstdio>
-void readint(int &num){
+int readint(){
   bool ng=0;
-  register int c;
-  num=0;
+  register int c=getchar(), num=0;
   c=getchar();
-  if(c=='-'){
-    ng=1;
-    c=getchar();
-  }
-  for(;c>47&&c<58;c=getchar()) num=num*10+c-48;
+  if(c=='-') ng=1;
+  for(c=getchar();c>47&&c<58;c=getchar()) num=num*10+c-48;
   if(ng) num=(~(num)+1);
 }
 void readstr(string &str){
