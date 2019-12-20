@@ -1,0 +1,119 @@
+#pragma GCC optimize("3")
+#include <vector>
+#include <unordered_map>
+#include <iostream>
+#include <stdlib.h>
+#include <limits.h>
+#include <string.h>
+using namespace std;
+#define RG register
+#define LS(a) ((a)<<1)
+#define RS(a) (((a)<<1)|1)
+#define PR(a) ((a)>>1)
+#define MAXC 15
+#define MAXN 10005
+struct node{
+    int dst, cst;
+    node(){}
+    node(int a, int b):dst(a), cst(b){}
+};
+std::vector<node> G[MAXN];
+void insertNgh(int src, int dst, int cst){ G[src].push_back(node(dst, cst)); }
+struct hpnode{
+    int ver, dis;
+    hpnode(){}
+    hpnode(int a, int b):ver(a), dis(b){}
+};
+hpnode hp[MAXN];
+int hpos[MAXN];
+class MinHeap{
+public:
+    int sz;
+    MinHeap(int a=0):sz(a){}
+    void swapNode(int l, int r){
+        hpnode t=hp[l];
+        hp[l]=hp[r];
+        hp[r]=t;
+        hpos[hp[r].ver]=r;
+        hpos[hp[l].ver]=l;
+    }
+    void pushUp(int rt){ for(;PR(rt)>0&&hp[PR(rt)].dis>hp[rt].dis;rt=PR(rt)) swapNode(rt, PR(rt)); }
+    void pushDown(int rt){
+        int l=LS(rt);
+        if(l>sz) return;
+        int r=RS(rt), sm=rt;
+        if(hp[sm].dis>hp[l].dis) sm=l;
+        if(r<=sz&&hp[sm].dis>hp[r].dis) sm=r;
+        if(sm!=rt){
+            swapNode(sm, rt);
+            pushDown(sm);
+        }
+    }
+    void incre(int ver, int dis){
+        int rt=hpos[ver];
+        hp[rt].dis=dis;
+        pushDown(rt);
+    }
+    void decre(int ver, int dis){
+        int rt=hpos[ver];
+        hp[rt].dis=dis;
+        pushUp(rt);
+    }
+    void insert(int ver, int dis){
+        hp[++sz].dis=dis;
+        hp[sz].ver=ver;
+        hpos[ver]=sz;
+        pushUp(sz);
+    }
+    bool inHp(int rt){ return rt<=sz; }
+    void extractMin(){
+        swapNode(1, sz--);
+        pushDown(1);
+    }
+};
+int dijk(int src, int dst, int v){
+    MinHeap mhp;
+    RG int i, j;
+    for(i=1;i<=v;++i) mhp.insert(i, INT_MAX);
+    mhp.decre(src, 0);
+    for(i=1;i<v;++i){
+        if(hp[1].ver==dst) return hp[1].dis;
+        RG int u=hp[1].ver, dis=hp[1].dis;
+        if(dis==INT_MAX) return INT_MAX;
+        mhp.extractMin();
+        RG int n=G[u].size();
+        for(j=0;j<n;++j){
+            RG int gd=G[u][j].dst, gc=G[u][j].cst, rt=hpos[gd];
+            if(mhp.inHp(rt)&&dis+gc<hp[rt].dis) mhp.decre(gd, dis+gc);
+        }
+    }
+    return hp[1].dis;
+}
+int main(){
+    RG int T, n, p, nr, cost, r, src, dst, i, j;
+    for(scanf("%d", &T);T--;){
+        scanf("%d", &n);
+        memset(hp, 0, sizeof(hpnode)*(n+1));
+        memset(hpos, 0, sizeof(int)*(n+1));
+        for(i=0;i<=n;G[i++].clear());
+        std::unordered_map<std::string, int> mp;
+        char s[MAXC];
+        for(i=1;i<=n;++i){
+            scanf("%s %d", s, &p);
+            mp[s]=i;
+            for(j=0;j<p;++j){
+                scanf("%d %d", &nr, &cost);
+                insertNgh(i, nr, cost);
+            }
+        }
+        scanf("%d", &r);
+        for(i=0;i<r;++i){
+            scanf("%s", s);
+            src=mp[s];
+            scanf("%s", s);
+            dst=mp[s];
+            printf("%d\n", dijk(src, dst, n));
+        }
+    }
+    return 0;
+}
