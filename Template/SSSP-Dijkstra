@@ -1,18 +1,45 @@
-int minD(int dist[], int spt[], int len) {
-    int min=INT_MAX, ind;  
-    for(int i=0;i<len;++i) if(!spt[i]&&dist[i]<=min) min=dist[i], ind=i;
-    return ind;
-}
-void dijk(int src, int len) {	//len: # of nodes in graph
-    int *dist=new int[len], *spt=new int[len];
-    for(int i=0;i<len;++i) dist[i]=INT_MAX, spt[i]=0;
-    dist[src]=0;
-    for(int i=0;i<len-1;++i){
-        int u=minD(dist, spt, len);
-        spt[u]=1;
-        for(int j=0;j<len;++j) 
-            if(!spt[j]&&V[u][j]&&dist[u]!=INT_MAX&&dist[u]+V[u][j]<dist[j]) 
-        dist[j]=dist[u]+V[u][j];
+#pragma GCC optimize("2")
+#include <bits/stdc++.h>
+using namespace std;
+#define PII pair<int, int>
+int dijk(int src, int dst, vector<PII> G[], int n){
+    priority_queue<PII, vector<PII>, greater<PII>> q; q.push({0, src});
+    vector<int> dist(n, INT_MAX);
+    for(dist[src]=0;!q.empty();){
+        int t=q.top().second; q.pop();
+        for(PII &i:G[t]){
+            int nxt=i.first, dis=i.second;
+            if(dist[nxt]>dist[t]+dis){
+                dist[nxt]=dist[t]+dis;
+                q.push({dist[nxt], nxt});
+            }
+        }
     }
-    printf("%d\n", dist[len-1]);
+    return dist[dst];
+}
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    register int T, n, ngh, ind, dis, cnt=0, i, t, sc, q, j;
+    string s, q1, q2;
+    for(cin>>T;T--;cnt=0){
+        cin>>n;
+        vector<PII> G[n];
+        unordered_map<string, int> mp;
+        for(i=0;i<n;++i){
+            cin>>s>>sc;
+            mp[s]=(t=cnt++);
+            for(j=0;j<sc;++j){
+                cin>>ind>>dis;
+                --ind;
+                G[t].push_back({ind, dis});
+                G[ind].push_back({t, dis});
+            }
+        }
+        cin>>q;
+        for(i=0;i<q;++i){
+            cin>>q1>>q2;
+            cout<<dijk(mp[q1], mp[q2], G, n)<<endl;
+        }
+    }
 }
