@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int lengthOfLongestSubstringKDistinct(string s, int k) {
+        if(s.size()<=k) return s.size();
+        int mp[128]={0}, cnt, l, r, rst=0;
+        for(cnt=l=r=0;r<s.size();++r){
+            cnt+=mp[s[r]]++?0:1;
+            for(;cnt>k;cnt-=--mp[s[l++]]?0:1);
+            rst=rst<r-l+1?r-l+1:rst;
+        }
+        return rst;
+    }
+};
