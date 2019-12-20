@@ -1,0 +1,51 @@
+//https://www.hackerrank.com/contests/cp1-fall-2019-contest-3/challenges/five-sum/copy-from/1317311429
+#include <bits/stdc++.h>
+using namespace std;
+#define INF 0x3f3f3f3f
+#define LL long long
+struct node{
+    LL a, b, val;
+    node(int i, int j, int k):a(i), b(j), val(k){}
+    friend bool operator <(const node &a, const node &b) { return a.val<b.val; }
+};
+bool cmp(node &a, node &b){ return a.val<b.val; }
+int n, k, rst[5], cur;
+set<node> st;
+vector<node> V;
+vector<vector<LL>> G;
+int main(){
+    cin>>n;
+    G.resize(5, vector<LL>(n));
+    for(int i=0;i<5;++i) for(int j=0;j<n;cin>>G[i][j++]);
+    cin>>k;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j){
+            node tn=node(G[0][i], G[1][j], G[0][i]+G[1][j]);
+            st.insert(tn);
+            V.push_back(node(G[2][i], G[3][j], G[2][i]+G[3][j]));
+        }
+    sort(V.begin(), V.end(), cmp), sort(G[4].begin(), G[4].end());
+    for(int i=0;i<5;++i){
+        cur+=G[i][0];
+        rst[i]=G[i][0];
+    }
+    for(int i=0;i<V.size();++i)
+        for(int j=0;j<n;++j){
+            LL tval=G[4][j]+V[i].val;
+            auto stval=st.lower_bound(node(-1, -1, k-tval));
+            if(stval==st.end()) --stval;
+            LL tmp=tval+stval->val;
+            if(abs(k-cur)>abs(k-tmp)){
+                cur=tmp;
+                rst[0]=stval->a, rst[1]=stval->b, rst[2]=V[i].a, rst[3]=V[i].b, rst[4]=G[4][j];
+            }
+            if(stval!=st.begin()){
+                tmp=tval+(--stval)->val;
+                if(abs(k-cur)>abs(k-tmp)){
+                    cur=tmp;
+                    rst[0]=stval->a, rst[1]=stval->b, rst[2]=V[i].a, rst[3]=V[i].b, rst[4]=G[4][j];
+                }
+            }
+        }
+    printf("%d %d %d %d %d", rst[0], rst[1], rst[2], rst[3], rst[4]);
+}
