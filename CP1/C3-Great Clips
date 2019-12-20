@@ -1,0 +1,37 @@
+//https://www.hackerrank.com/contests/cp1-fall-2019-contest-3/challenges/great-clips/copy-from/1317272135
+#include <bits/stdc++.h>
+using namespace std;
+#define LL long long
+#define PLL pair<LL, LL>
+int n, a, t, sz;
+vector<pair<int, PLL>> V;
+vector<LL> RV({0});
+set<PLL> st;
+double run(){
+    LL rst=0, cur;
+    int nxt=1;
+    for(cur=V[0].first+V[0].second.second;nxt<n||!st.empty();){
+        for(;nxt<n&&V[nxt].first<cur;++nxt) st.insert(PLL(V[nxt].second.first, nxt));
+        if(st.empty()&&nxt<n){
+            cur=V[nxt].first+V[nxt].second.second;
+            RV.push_back(0);
+            ++nxt;
+        }else if(!st.empty()){
+            set<PLL>::iterator itr=st.begin();
+            RV.push_back(cur-V[itr->second].first);
+            cur+=V[itr->second].second.second;
+            st.erase(itr);
+        }
+    }
+    sort(RV.begin(), RV.end());
+    return ((sz=RV.size())&1?(double)RV[sz>>1]:(double)((double)RV[sz-1>>1]+RV[sz>>1])/2.0);
+}
+int main(){
+    cin>>n;
+    for(int i=0;i<n;++i){
+        cin>>a>>t;
+        V.push_back(make_pair(a, PLL(i, t)));
+    }
+    sort(V.begin(), V.end());
+    printf("%.1lf\n", run());
+}
