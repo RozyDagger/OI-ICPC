@@ -1,0 +1,31 @@
+//https://www.hackerrank.com/contests/cp1-fall-2019-contest-3/challenges/trick-r-treat/copy-from/1317431091
+#include <bits/stdc++.h>
+using namespace std;
+struct node{
+    int val;
+    bool f;
+    node(int a, bool b):val(a), f(b){}
+};
+int M, N, K, ti, T, rst;
+bool tf;
+vector<vector<node>> G;
+vector<int> V;
+int main(){
+    cin>>M>>N>>K;
+    G.resize(M), V.resize(M);
+    for(int i=0;i<M;++i)
+        for(int j=0;j<N;++j){
+            cin>>ti>>tf;
+            G[i].push_back(node(ti, tf));
+            T+=!tf?ti:0;
+        }
+    for(int i=0;i<M;++i){
+        int tmp=0;
+        for(int l=0, r=0;r<G[i].size();++r){
+            tmp+=G[i][r].f?G[i][r].val:0;
+            for(;r-l>=K;tmp-=G[i][l++].f?G[i][l-1].val:0);
+            rst=rst<tmp?tmp:rst;
+        }
+    }
+    cout<<T+rst;
+}
