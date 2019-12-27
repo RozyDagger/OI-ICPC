@@ -1,10 +1,11 @@
 Most problems are written in C++; some may be in Python.
 
-Due to no optimization on I/O in leetcode tester, be sure to include following C++ code for better performance:
+For additional optimization:
 
-        static int x = []() {
-          ios::sync_with_stdio(false);
-          cin.tie(nullptr);
+        #pragma GCC optimize("3")
+        static char _=[](){
+            ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+            return 0;
         }();
 
 
