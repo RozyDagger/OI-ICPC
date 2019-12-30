@@ -1,0 +1,20 @@
+#define M10(a) (((a)<<3)+((a)<<1))
+#define N(a) (~(a)+1)
+class Solution {
+public:
+    string complexNumberMultiply(string a, string b) {
+        int ac=0, ai=0, bc=0, bi=0, an=a.size(), bn=b.size(), i=0, rc, ri;
+        bool f=a[i]=='-'?++i:0;
+        for(;a[i]!='+';++i) ac=M10(ac)+a[i]-'0';
+        ac=f?N(ac):ac;
+        for(f=a[++i]=='-'?++i:0;a[i]!='i';++i) ai=M10(ai)+a[i]-'0';
+        ai=f?N(ai):ai;
+        for(f=b[(i=0)]=='-'?++i:0;b[i]!='+';++i) bc=M10(bc)+b[i]-'0';
+        bc=f?N(bc):bc;
+        for(f=b[++i]=='-'?++i:0;b[i]!='i';++i) bi=M10(bi)+b[i]-'0';
+        bi=f?N(bi):bi;
+        rc=ac*bc-ai*bi;
+        ri=ai*bc+ac*bi;
+        return to_string(rc)+'+'+to_string(ri)+'i';
+    }
+};
