@@ -47,45 +47,24 @@ Similarly, the fire hydrant at index 3 can have its water conserved in the drain
 
 Hence, there's no wastage of water and the final answer is 0.
 **************************************************/
-#include <cmath>
-#include <cstdio>
-#include <vector>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 int k, d, f, rst, len;
 string s;
-int nD(int i){
-    int a;
-    for(a=i;a<len;++a){
-        if(s[a]=='D') return a;
-    }
-    return -1;
-}
-int nF(int i){
-    int a;
-    for(a=i;a<len;++a){
-        if(s[a]=='F') return a;
-    }
+int nC(int i, char c){
+    for(int a=i;a<len;++a) if(s[a]==c) return a;
     return -1;
 }
 int main() { 
     cin>>k>>s;
     len=s.length();
     for(int i=0;i<len;++i) if(s[i]=='F') ++rst;
-    d=nD(0);
-    f=nF(0);
-    while(d!=-1&&f!=-1){
+    for(d=nC(0, 'D'), f=nC(0, 'F');d!=-1&&f!=-1;)
         if(abs(d-f)<=k){
             --rst;
-            d=nD(d+1);
-            f=nF(f+1);
-        }else if(d-f>k){
-            f=nF(f+1);
-        }else if(f-d>k){
-            d=nD(d+1);
-        }
-    }
+            d=nC(d+1, 'D'), f=nC(f+1, 'F');
+        }else if(d-f>k) f=nC(f+1, 'F');
+        else if(f-d>k) d=nD(d+1, 'D');
     cout<<rst;
     return 0;
 }
