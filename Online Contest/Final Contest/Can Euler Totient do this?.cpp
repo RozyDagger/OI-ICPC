@@ -39,19 +39,14 @@ Sample Output 0
 4 303793
 
 *******************************************/
-#include <cmath>
-#include <cstdio>
-#include <vector>
-#include <set>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 int n, t, p;
 int phi(int x){
     int rst=x;
     for(int p=2;p*p<=x;++p)
         if(!x%p){
-            while(!x%p) x/=p; 
+            for(;!x%p;x/=p); 
             rst-=rst/p; 
         } 
     if(x>1) rst-=rst/x; 
@@ -63,10 +58,6 @@ int run(int x){
     return rst;
 }
 int main(){
-    cin>>n;
-    while(n--){
-        cin>>t>>p;
-        cout<<t<<" "<<run(p)<<endl;
-    }
+    for(cin>>n;n--;cout<<t<<" "<<run(p)<<endl) cin>>t>>p;
     return 0;
 }
