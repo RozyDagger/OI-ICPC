@@ -1,7 +1,6 @@
 //Shortest distance between a pair of naturally different elements in a 2D array.
 #include <bits/stdc++.h>
 using namespace std;
-int dr[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
 struct node{
     int x, y;
     node(int a, int b):x(a), y(b){}
