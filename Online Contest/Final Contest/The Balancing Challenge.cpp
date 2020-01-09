@@ -36,25 +36,16 @@ Explanation 1
 The given expression is not valid as the closing brackets doesn't match the opening bracket type.
 *********************************************/
 #include <bits/stdc++.h>
-#include <stack>
 using namespace std;
 
 // Complete the isBalanced function below.
 string isBalanced(string s) {
-    stack<char> st;
-    size_t len=s.length();
-    for(int i=0;i<len;++i){
-        if(s[i]=='('||s[i]=='{'||s[i]=='['||s[i]=='<'){
-            st.push(s[i]);
-        }
-        if(s[i]=='}'||s[i]==')'||s[i]==']'||s[i]=='>'){
-            if(st.empty()) return "False";
-            char t=st.top();
-            st.pop();
-            if((s[i]==')'&&t=='(')||(s[i]=='}'&&t=='{')||(s[i]==']'&&t=='[')||(s[i]=='>'&&t=='<')) continue;
-            else return "False";
-        }
-    }
+    stack<char> stk;
+    size_t n=s.size();
+    for(int i=0;i<n;++i)
+        if(s[i]=='('||s[i]=='{'||s[i]=='['||s[i]=='<') stk.push(s[i]);
+        else if(stk.empty()||abs(stk.top()-s[i])>2) return "False";
+        else stk.pop();
     return st.empty()?"True":"False";
 }
 
