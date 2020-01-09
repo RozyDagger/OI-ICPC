@@ -36,25 +36,22 @@ Binary up sequence: 1 2 4
 ****************************************/
 #include <bits/stdc++.h>
 using namespace std;
-#define LL unsigned long long
-LL n;
+#define ULL unsigned long long
+ULL n;
 int main() {
     cin>>n;
-    LL s;
+    ULL s;
     float x;
-    int cnt=0;
-    int V[4000003];
+    int cnt=0, V[4000003]={0};
     for(int i=0;i<n;++i){
         cin>>s;
         x=log2(s);
-        if((!(ceil(x)-floor(x))&&s%2==0)||(s==1)) V[cnt++]=x;//V.push_back(x);
+        if((!(ceil(x)-floor(x))&&s%2==0)||(s==1)) V[cnt++]=x;
     }
     int dp[cnt]={0};
     for(int i=0;i<n;++i){
         int t=0;
-        for(int j=0;j<i;++j){
-            if(V[i]>V[j]) t=max(t, dp[j]);
-        }
+        for(int j=0;j<i;++j) if(V[i]>V[j]) t=max(t, dp[j]);
         dp[i]=t+1;
     }
     cout<<dp[cnt-1]<<endl;
