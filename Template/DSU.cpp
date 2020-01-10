@@ -22,3 +22,22 @@ void union(int a, int b){
     if(R[a]==R[b]) ++R[b];
   }
 }
+/*
+Rank by count of elements in set
+int n, p[MAXN], c[MAXN];
+int F(int a){
+    if(a==p[a]) return a;
+    else{
+        c[p[a]]+=c[a];
+        c[a]=0;
+        return p[a]=F(p[a]);
+    }
+}
+void M(int a, int b){
+    a=F(a);
+    b=F(b);
+    if(c[a]>=c[b]) swap(a, b);
+    p[a]=b;
+    F(a);
+}
+*/
