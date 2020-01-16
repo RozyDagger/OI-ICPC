@@ -28,7 +28,7 @@
 
 //Common logic operations
 #define INTMAX(a, b) ((b)&(((a)-(b))>>31)|(a)&~(((a)-(b))>>31))
-#define INTEMAX(a, b) ((a)^((a)^(b))&-((x)<(y)))
+#define INTEMAX(a, b) ((a)^((a)^(b))&-((a)<(b)))
 #define INTEMIN(a, b) ((b)^((a)^(b))&-((a)<(b)))
 #define MAX(a, b) ((a)>(b)?(a):(b))
 #define MIN(a, b) ((a)<(b)?(a):(b))
