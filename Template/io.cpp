@@ -14,7 +14,7 @@ inline void readint(int &x){
 }
 inline void readstr(char *x){
     char c=getchar_unlocked();
-    short i=0;
+    int i=0;
     for(;c<97||c>122;c=getchar_unlocked());
     for(;c>96&&c<123;c=getchar_unlocked()) x[i++]=c;
 }
