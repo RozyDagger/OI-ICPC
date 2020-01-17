@@ -27,7 +27,9 @@
 #define NEGA(a) (~(a)+1)
 
 //Common logic operations
-#define INTMAX(a, b) ((b)&(((a)-(b))>>31)|(a)&~(((a)-(b))>>31))
+#define INTMIN(a, b) ((a)+(((b)-(a))&((b)-(a))>>31))
+#define INTMAX(a, b) ((b)-(((b)-(a))&((b)-(a))>>31))
+//#define INTMAX(a, b) ((b)&(((a)-(b))>>31)|(a)&~(((a)-(b))>>31))
 #define INTEMAX(a, b) ((a)^((a)^(b))&-((a)<(b)))
 #define INTEMIN(a, b) ((b)^((a)^(b))&-((a)<(b)))
 #define MAX(a, b) ((a)>(b)?(a):(b))
