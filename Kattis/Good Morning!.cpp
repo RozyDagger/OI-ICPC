@@ -9,7 +9,6 @@ int main(){
         scanf("%d", &t);
         set<int>::iterator itr=st.lower_bound(t);
         r=*itr;
-        set<int>::iterator ttr=itr==st.begin()?itr:--itr;
-        l=*ttr;
+        l=itr==st.begin()?r:*(--itr);
     }
 }
