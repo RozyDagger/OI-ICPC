@@ -27,7 +27,7 @@ inline void writeint(int x){
         putchar_unlocked('-');
         x=~x+1;
     }
-    LL n=x, t=n, cnt=0;
+    int n=x, t=n, cnt=0;
     for(;!(t%10);t/=10) ++cnt;
     for(t=0;n;n/=10) t=(t<<3)+(t<<1)+n%10;
     for(;t;t/=10) putchar_unlocked(t%10+'0');
