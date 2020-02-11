@@ -18,7 +18,7 @@ inline void readstr(char *x){
     for(;c<97||c>122;c=getchar_unlocked());
     for(;c>96&&c<123;c=getchar_unlocked()) x[i++]=c;
 }
-inline void writeint(LL x){
+inline void writeint(int x){
     if(!x){
         putchar_unlocked('0');
         return;
@@ -27,8 +27,7 @@ inline void writeint(LL x){
         putchar_unlocked('-');
         x=~x+1;
     }
-    LL n=x, t=n;
-    int cnt=0;
+    LL n=x, t=n, cnt=0;
     for(;!(t%10);t/=10) ++cnt;
     for(t=0;n;n/=10) t=(t<<3)+(t<<1)+n%10;
     for(;t;t/=10) putchar_unlocked(t%10+'0');
