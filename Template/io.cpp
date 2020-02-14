@@ -1,3 +1,13 @@
+//Source code of <get/put>char_unlocked() {return __getc_unlocked_body(stdin);}
+#define __getc_unlocked_body(_fp)                                        \
+  (__glibc_unlikely ((_fp)->_IO_read_ptr >= (_fp)->_IO_read_end)        \
+   ? __uflow (_fp) : *(unsigned char *) (_fp)->_IO_read_ptr++)
+
+#define __putc_unlocked_body(_ch, _fp)                                        \
+  (__glibc_unlikely ((_fp)->_IO_write_ptr >= (_fp)->_IO_write_end)        \
+   ? __overflow (_fp, (unsigned char) (_ch))                                \
+   : (unsigned char) (*(_fp)->_IO_write_ptr++ = (_ch)))
+
 #include <stdio.h>
 #define M10(a) (((a)<<3)+((a)<<1))
 inline void readint(int &x){
@@ -12,7 +22,7 @@ inline void readint(int &x){
     for(;c>47&&c<58;c=getchar_unlocked()) x=M10(x)+c-48;
     if(ng) x=-x;
 }
-inline void readstr(char *x){
+inline void readstr(char *x){   //only lowercase here
     char c=getchar_unlocked();
     int i=0;
     for(;c<97||c>122;c=getchar_unlocked());
