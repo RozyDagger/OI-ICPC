@@ -1,0 +1,70 @@
+#define UMP unordered_map
+#define LST list<int>
+#define VAL(a, b) ((a).find(b)!=(a).end())
+#define PII pair<int, int>
+class LFUCache {
+public:
+    int sz, mnf;
+    UMP<int, PII> kvmp;             //key:={value, freq}
+    UMP<int, LST> flmp;             //key:={lst|lst[freq]}
+    UMP<int, LST::iterator> klmp;
+    inline LFUCache(int a):sz(a), mnf(0){}
+    inline int get(int k){
+        if(!sz) return -1;
+        if(!VAL(kvmp, k)) return -1;
+        int rst=kvmp[k].first;
+        flmp[kvmp[k].second].erase(klmp[k]);
+        ++kvmp[k].second;
+        flmp[kvmp[k].second].emplace_front(k);
+        klmp[k]=flmp[kvmp[k].second].begin();
+        if(flmp[mnf].empty()) ++mnf;
+        return rst;
+    }
+    inline void put(int k, int v){
+        if(!sz) return;
+        if(get(k)!=-1){
+            kvmp[k].first=v;
+            return;
+        }
+        if(kvmp.size()>=sz){
+            kvmp.erase(flmp[mnf].back());
+            klmp.erase(flmp[mnf].back());
+            flmp[mnf].pop_back();
+        }
+        kvmp[k]=PII(v, 1);
+        flmp[1].emplace_front(k);
+        klmp[k]=flmp[1].begin();
+        mnf=1;
+    }
+};
+/*
+3 containers:
+    kvmp: map key to value & freq
+    flmp: map freq to list of keys
+    klmp: map key to list iterator
+2 meta-var:
+    sz: max size
+    mnf: current min freq
+
+init:
+    init containers and meta variables
+get(k):
+    if not exist, return -1
+    delete k from its list of flmp[kvmp[k].second]
+    ++kvmp[k].second //the freq
+    push k to the begin of flmp[kvmp[k].second]
+    update klmp[k]=flmp[kvmp[k].second].begin()
+    if flmp[mnf].empty(), ++mnf
+    return k-keyed value
+put(k, v):
+    if get(k)!=-1, update kvmp[k]=v, return
+    if kvmp.size()>=sz:
+        remove kvmp[flmp[mnf].back()]
+        remove klmp[flmp[mnf].back()]
+        remove flmp[mnf].back()
+    update kvmp[k]={v, 1}
+    push k to the begin of flmp[1]
+    update klmp[k]=flmp[1].begin()
+    update mnf=1
+* To deal with frequence tie, always append new added element to begin and pop back.
+*/
