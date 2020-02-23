@@ -6,8 +6,8 @@ class LFUCache {
 public:
     int sz, mnf;
     UMP<int, PII> kvmp;             //key:={value, freq}
-    UMP<int, LST> flmp;             //key:={lst|lst[freq]}
-    UMP<int, LST::iterator> klmp;
+    UMP<int, LST> flmp;             //freq:={lst|lst[key]}
+    UMP<int, LST::iterator> klmp;   //key:={&lst}
     inline LFUCache(int a):sz(a), mnf(0){}
     inline int get(int k){
         if(!sz) return -1;
