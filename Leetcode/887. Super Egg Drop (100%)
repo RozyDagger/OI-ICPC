@@ -1,0 +1,25 @@
+    int superEggDrop(int k, int n){
+        int dp[k+1]={0}, i;
+        for(i=0;dp[k]<n;++i) for(int j=k;j;--j) dp[j]+=dp[j-1]+1;
+        return i;
+    }
+/*
+Intuitively thinking:
+O(n*k+k*logn) DP (n*k for space declarance)
+dp[i][j]: max floor number we can test with i moves and j eggs.
+For dp[i][j], an action on a floor:
+    if the egg breaks, max floor checked is dp[i-1][k-1].
+    else, we can then check dp[i-1][k] as we still have k eggs.
+Bellman eq: dp[i][j]=dp[i-1][k-1]+dp[i-1][k]+1
+def run(k: int, n: int):
+    dp=[[0]*(k+1)]*(n+1)
+    for i in range(1, n+1):
+        for j in range(1, k+1):
+            dp[i][j]=dp[i-1][j-1]+dp[i-1][j]+1
+        if(dp[i][j]>=n):
+            return i
+*/
+/*
+To optimize, we can use 1d dp array, as the current status only depends on (i-1)th status.
+Code is the cpp submission.
+*/
