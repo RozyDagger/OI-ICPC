@@ -1,11 +1,21 @@
 /***********************************
-Purdue Pete is planting a row of trees outside WALC. However, Mr. Nerd comes out from WALC from time to time to remove one of the trees at a time (Don’t ask me why, I’m wondering too :) Think this row of trees as an array. The location of each tree is from 1 to n. Pete plants a tree at one location at each time (If there’s already a tree, Pete does nothing), while Mr. Nerd chooses a location to remove a tree from (If there’s no tree, he just comes back to WALC). President Daniels wants to know the length of the longest consecutive trees throughout this weird war between Pete and Mr. Nerd. Can you help him?
+Purdue Pete is planting a row of trees outside WALC. However, Mr. Nerd comes out from WALC from time to time to remove one of the trees at a time 
+(Don’t ask me why, I’m wondering too :) Think this row of trees as an array. The location of each tree is from 1 to n. 
+Pete plants a tree at one location at each time (If there’s already a tree, Pete does nothing), 
+while Mr. Nerd chooses a location to remove a tree from (If there’s no tree, he just comes back to WALC). 
+President Daniels wants to know the length of the longest consecutive trees throughout this weird war between Pete and Mr. Nerd. 
+Can you help him?
 
 Input Format
 
-The first line contains two integers n, m (1 <= n, m <= 500000). n is the total number of locations to plant trees, m is the total number of times that Pete and Mr. Nerd plants/removes trees.
+The first line contains two integers n, m (1 <= n, m <= 500000). 
+n is the total number of locations to plant trees, 
+m is the total number of times that Pete and Mr. Nerd plants/removes trees.
 
-In the following m lines, each line contains two integers a, b. if a = 1, Pete is going to plant a tree; if a = 2, Mr. Nerd is going to remove a tree. b is the location to plant a tree at/remove a tree from. (1 <= a <= 2, 1 <= b <= n)
+In the following m lines, each line contains two integers a, b. 
+If a = 1, Pete is going to plant a tree; 
+if a = 2, Mr. Nerd is going to remove a tree. 
+b is the location to plant a tree at/remove a tree from. (1 <= a <= 2, 1 <= b <= n)
 
 Output Format
 
