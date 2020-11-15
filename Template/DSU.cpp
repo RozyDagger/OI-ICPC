@@ -24,20 +24,20 @@ void union(int a, int b){
 }
 /*
 Rank by count of elements in set
-int n, p[MAXN], c[MAXN];
+int n, P[MAXN], R[MAXN];
 int F(int a){
-    if(a==p[a]) return a;
+    if(a==P[a]) return a;
     else{
-        c[p[a]]+=c[a];
-        c[a]=0;
-        return p[a]=F(p[a]);
+        R[P[a]]+=R[a];
+        R[a]=0;
+        return P[a]=F(P[a]);
     }
 }
-void M(int a, int b){
+void U(int a, int b){
     a=F(a);
     b=F(b);
-    if(c[a]>=c[b]) swap(a, b);
-    p[a]=b;
+    if(R[a]>=R[b]) swap(a, b);
+    P[a]=b;
     F(a);
 }
 */
